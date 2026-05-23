@@ -1,5 +1,5 @@
 # 사이트 설정
-site_name: GroomGlow_Pro Guide
+site_name: GroomFlow_Pro Guide
 site_url: https://github.io
 site_author: chamiseul
 
@@ -25,7 +25,7 @@ markdown_extensions:
 
 # 사이트 메뉴 및 목차 구조
 nav:
-  - GroomGlow_Pro Guide: index.md
+  - GroomFlow_Pro Guide: index.md
   # - "Go to GroomForge Wiki": integration.md
 
 # 플러그인 설정
