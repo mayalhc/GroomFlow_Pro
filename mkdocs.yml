@@ -1,21 +1,21 @@
 # 사이트 설정
-site_name: Wiggle 2 RTX
-site_url: https://github.com/mayalhc/blender-wiggle-2
+site_name: GroomGlow_Pro Guide
+site_url: https://github.io
 site_author: chamiseul
 
-# 시놀로지 볼륨 매핑 경로와 일치
+# 문서 소스 폴더 경로
 docs_dir: 'docs'
 
-# 테마 설정
+# 테마 설정 (기존 ReadTheDocs 스타일 유지)
 theme:
   name: readthedocs
   highlightjs: true
-  collapse_navigation: false  # 전체를 항상 펼침
+  collapse_navigation: false  # 네비게이션 전체를 항상 펼침
   sticky_navigation: true
   navigation_depth: 4
-  titles_only: false 
+  titles_only: false
 
-# 마크다운 확장 기능 (기본 제공 모듈만 사용)
+# 마크다운 확장 기능
 markdown_extensions:
   - admonition
   - tables
@@ -23,10 +23,10 @@ markdown_extensions:
   - attr_list
   - def_list
 
-# 네비게이션
+# 사이트 메뉴 및 목차 구조
 nav:
-  - Wiggle 2 RTX Guide: index.md
-  - "Go to GroomForge Wiki": integration.md
+  - GroomGlow_Pro Guide: index.md
+  # - "Go to GroomForge Wiki": integration.md
 
 # 플러그인 설정
 plugins:
