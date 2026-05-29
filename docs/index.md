@@ -153,4 +153,8 @@ The Multi-Layer Strategy: Don't try to make the whole hairstyle in one layer. Cr
 멀티 레이어 전략: 전체 헤어스타일을 하나의 레이어로 만들려고 하지 마세요. Replace Existing Hair를 끈 상태에서 '베이스' 레이어 (높은 밀도, 짧은 길이), '메인' 레이어 (중간 밀도, 스타일링 적용), 그리고 '플라이어웨이' 레이어 (낮은 밀도, 높은 부스스함)를 생성하세요.
 
 Performance Tip: Lower the Strand Resolution to 4 or 6 while working on massive hairstyles, then bump it up to 12 right before exporting to Unreal Engine for maximum viewport performance.
+<<<<<<< HEAD
 퍼포먼스 팁: 방대한 헤어스타일을 작업하는 동안에는 Strand Resolution을 4 또는 6으로 낮추어 최상의 뷰포트 성능을 유지하고, 언리얼 엔진으로 내보내기 직전에 12로 올려 최고의 뷰포트 퍼포먼스를 확보하세요.
+=======
+퍼포먼스 팁: 방대한 헤어스타일을 작업하는 동안에는 Strand Resolution을 4 또는 6으로 낮추어 최상의 뷰포트 성능을 유지하고, 언리얼 엔진으로 내보내기 직전에 12로 올려 최고의 뷰포트 퍼포먼스를 확보하세요.
+>>>>>>> c357b3b72d12e2ed8b16d956de997c51ad189163
