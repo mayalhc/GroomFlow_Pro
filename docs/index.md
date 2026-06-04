@@ -1,160 +1,283 @@
-# GroomFlow_Pro Add-on Guidebook
-
 ![GroomFlow01.jpg](assets/GroomFlow02.png)
 
-Welcome to the official documentation and user guide page for GroomFlow_Pro. Learn how to maximize your workflow efficiency using this add-on.
 
-## 🚀 Key Features
+# 📖 GroomFlow Pro Add-on Guidebook
 
-* **Real-time Graphic Optimization**: Enhance viewport performance with a single click.
-* **Smart Guide System**: Provides an intuitive UI that even beginners can easily follow.
-* **Powerful Presets**: Instantly apply a wide variety of pre-made templates.
 
-## 🛠 Getting Started
+* **Welcome to GroomFlow Pro**
+  * Welcome to the official documentation and user guide page for GroomFlow Pro.
+  * Learn how to maximize your workflow efficiency using this advanced guide-driven asset.
+![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
+---
 
-If you are new to GroomFlow_Pro, follow these simple steps to get started:
+## 🚀 Key Features Guide
 
-1. **Download**: Get the latest version of the add-on file ready.
-2. **Installation**: Install and activate the program according to the guide.
-3. **Install Essential Extensions**: Go to the Extensions menu within the add-on preferences, and click 'Install' on the recommended base extensions to unlock full functionality.
-4. **Preferences**: Adjust the options to fit your specific workspace layout.
+* **Guide-Based Strand Generation**
+  * Creates dense hair strands from a lightweight guide curve workflow without the performance limitations of traditional systems.
+  * Built around a guide-to-strand generation pipeline, allowing artists to design clean guide curves while automatically generating large amounts of production-ready strands.
+![GroomFlow04.png](assets/GroomFlow04.png)
+<br>
+<br>
+* **Surface-Locked Strand Distribution**
+  * Fixes the issue where traditional duplication setups cause strands to float above the surface or clip through the mesh, especially around eyebrows, beards, eyelashes, and high-curvature facial areas.
+  * Solves this problem with a BVHTree-powered surface projection system that continuously snaps generated strand roots directly onto the target mesh.
+  * Results in a stable, surface-locked groom where every generated strand remains accurately attached to the skin without unwanted gaps, floating roots, or penetration issues.
+  ![GroomFlow05.png](assets/GroomFlow05.png)
+<br>
+<br>
+* **Optimized Production Workflow**
+  <br>
+  * Keeps guide curves completely separated from generated output strands, providing a clean and non-destructive grooming workflow.
+  * Mirrors modern professional grooming pipelines while maintaining a simple Blender-native workflow for character hair, eyebrows, facial hair, fur, and Unreal Engine groom preparation.
+  * Designed to maximize visual fidelity while reducing manual cleanup and correction work during production.
+![GroomFlow06.png](assets/GroomFlow06.png)
+---
+
+## 🛠 Installation Guide
+
+Before starting the workflow, make sure to set up the add-on correctly by following these steps:
+
+1. **Download**
+   * Get the latest version of the GroomFlow_Pro add-on file ready.
+<br>
+<br>
+2. **Installation**
+   * Install and activate the program within Blender preferences.
+   * Follow the general Blender add-on installation guide.
+<br>
+<br>
+3. **Install Essential Extensions**
+   * Go to the Extensions menu inside the add-on preferences.
+   * Click 'Install' on the recommended base extensions to unlock full functionality.
+<br>
+<br>
+4. **Preferences**
+   * Adjust the options to fit your specific workspace layout.
 
 ---
 
-## GroomFlow System - Comprehensive User Guide
+## 1. Global Scale Calibration
 
-GroomFlow 시스템 - 종합 사용자 가이드
 
-Welcome to the official documentation for GroomFlow System. Follow this guide to unlock the full potential of real-time hair grooming in Blender.
-GroomFlow 시스템의 공식 문서에 오신 것을 환영합니다. 블렌더에서 실시간 헤어 그루밍의 모든 잠재력을 잠금 해제하려면 이 가이드를 따르세요.
+* **Target Base Scale**
+  * Sets the global base scale factor for all generated hair guide curves.
+  * Prevents hair from appearing too small or large due to scene units or character mesh scale differences.
+  * Adjusts the value based on the default 1.0 to uniformly control the scale of all guide curves.
+![GroomFlow_Pro_01_02.gif](assets/GroomFlow_Pro_01_02.gif)
 
-Core Mechanics: Weight-Based Live Guide Generation
-핵심 메커니즘: 웨이트 기반 실시간 가이드 생성
+## 2. Process Control Buttons
 
-The absolute core of GroomFlow System is generating and controlling hair curves based on Weight Paint Values with live, real-time feedback.
-GroomFlow 시스템의 절대적인 핵심은 라이브 실시간 피드백을 통해 웨이트 페인트 값을 기반으로 헤어 커브를 생성하고 제어하는 것입니다.
+* **Generate Hair Curves**
+  * Executes the 50% length blending algorithm to generate actual hair curves on the surface.
+  * This is the final output button used after completing all setups.
+  * Prevents bald spots in weight 0 areas, guaranteeing a minimum of 50% base length.
+<br>
+<br>
+* **Go to Weight Paint Mode**
+  * Instantly switches the selected mesh into 'Weight Paint Mode'.
+  * Entry point to check and manually brush dense zones (Red) or short zones (Blue).
+  * Eliminates menu navigation, allowing direct map tweaks within the creation workflow.
+![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
+<br>
+<br>
+* **Smooth Weights Gradient**
+  * Smooths out the boundaries of the designated weight map into a soft gradient.
+  * Sharp transitions cause abrupt length changes that look unnatural.
+  * Expands the transition zone, ensuring a smooth length gradient from 100% to 50%.
+![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
 
-### 1. Live Real-Time Control & Safety Lock
-### 1. 라이브 실시간 제어 및 세이프티 락 (Lock)
+!!! warning
+    * **Never Modify Properties After Editing Curves**
+      * NEVER change the property control values (Density, Length, etc.) in the panel after manually editing or sculpting the generated hair curves.
+      * Changing any value forces the algorithm to recalculate and respawn the hair from scratch, completely wiping out your custom sculpt and guide edits.
+      <br>
+    * **Enforce Lock Feature in Sculpt Mode**
+      * Always activate the 'Lock' feature before entering Sculpt Mode to protect your custom hair groom data.
+      * The Lock feature acts as a crucial safety mechanism to prevent accidental parameter tweaks from vaporizing your manual editing progress.
 
-You can tweak hair length, density, and thickness live while looking at your viewport. CRITICAL WARNING (Please Read!): If you edit or groom the generated hair curves manually and then tweak the sliders afterward, your edits will be COMPLETELY RESET. Always use the LOCK / UNLOCKED toggle button next to the Strand Shape Control to protect your custom grooms from resetting.
-뷰포트를 보면서 헤어 길이, 밀도, 두께를 실시간으로 조절할 수 있습니다. 치명적인 경고 (필독!): 생성된 헤어 커브를 수동으로 편집하거나 빗질한 후 슬라이더를 조절하면 편집 내용이 완전히 초기화됩니다. 커스텀 그룸이 초기화되는 것을 방지하려면 항상 Strand Shape Control 옆에 있는 LOCK / UNLOCKED 토글 버튼을 사용하세요.
 
-How to use:
-조작법:
+## 3. Generation Options
 
-- Adjust sliders until you get the base shape. (기본 형태를 얻을 때까지 슬라이더를 조절합니다.)
-- Click the LOCK button to freeze the parameters. (LOCK 버튼을 클릭하여 파라미터를 고정합니다.)
-- Start custom manual grooming safely. (안전하게 커스텀 수동 그루밍을 시작합니다.)
+* **Replace Existing Hair**
+  * Automatically deletes and overwrites previous hair curves in the active layer when generating new ones.
+  * Unchecking this option preserves existing hair, allowing you to layer and stack new curves on top.
+![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
+<br>
+<br>
+* **Generate on Vertices**
+  * Snaps and generates hair guide curves precisely on the vertices of the mesh instead of the face areas.
+  * Useful for low-poly assets or specialized grooms that require perfectly aligned hair placement based on vertex layouts.
+![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
 
-[GIF PLACEHOLDER]
-Path: assets/01_live_control_and_lock.gif
-Description: Show sliding values and then locking the UI
-설명: 슬라이더 값을 조절한 후 UI를 잠그는 모습 표시
+## 4. Hair Settings & Property Controls
 
-Step-by-Step UI Function Guide
-단계별 UI 기능 가이드
+* **Min Length**
+  * Sets the minimum length limit for hair generated in the lowest weight areas (0.0).
+  * Lower values shorten hair in blue areas, guaranteeing 50% of the maximum length based on the current algorithm.
+<br>
+<br>
+* **Max Length**
+  * Sets the maximum length for hair generated in the highest weight areas (1.0).
+  * Functions as the baseline value determining the hair length in key zones painted in red.
+<br>
+<br>
+* **Guide Density**
+  * Controls the total target count of hair guide curves to be generated on the mesh surface.
+  * Higher numbers spawn denser guides, determining the overall volume and density.
+<br>
+<br>
+* **Spawn Radius**
+  * Controls the random dispersion radius around the vertices where each guide curve is generated.
+  * At 0.0, it precisely snaps to the surface; increasing the value spreads the spawn positions wider.
+<br>
+<br>
+* **Weight Threshold**
+  * Sets the minimum threshold cutoff filter of the weight map for hair generation.
+  * Dropping below 0.01 ignores weights to spawn uniformly; raising it cuts off zones below the value.
+<br>
+<br>
+* **Strand Resolution**
+  * Specifies the number of segments (points) and resolution making up a single hair curve.
+  * Higher values result in smoother and more flexible curves but impact calculation and viewport performance.
+![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
 
-### 2. Hair Style Nodes Stack (Instant Styling)
-### 2. 헤어 스타일 노드 스택 (즉각적인 스타일링)
+## 5. Thickness & Noise Settings
 
-We provide a highly intuitive node-stack layout to let you add fundamental hair structures instantly. Add Clump, Interpolate, Curl, Frizz, Braid, or Duplicate with a single click to build complex hair shapes without touching the geometry node editor.
-기본적인 헤어 구조를 즉시 추가할 수 있도록 매우 직관적인 노드 스택 레이아웃을 제공합니다. 단 한 번의 클릭으로 Clump, Interpolate, Curl, Frizz, Braid 또는 Duplicate를 추가하여 지오메트리 노드 에디터를 만질 필요 없이 복잡한 헤어 형태를 빌드할 수 있습니다.
+* **Min Root Thickness**
+  * Globally sets the minimum thickness for the root section of the guide curves.
+  * Used as the lower boundary reference when expressing fine or thin hairs.
+<br>
+<br>
+* **Max Root Thickness**
+  * Globally sets the maximum thickness for the root section of the guide curves.
+  * Used to define coarse hair or thick foundational guidelines.
+<br>
+<br>
+* **Tip Thickness**
+  * Adjusts the thickness of the hair ends corresponding to the absolute tip of the guide curves.
+  * Typically set near 0.0 to create a tapering effect that sharpens toward the end.
+<br>
+<br>
+* **Frizz Noise Strength**
+  * Controls the global noise deformation strength that adds a curly or frizzy feel to the hairstyle.
+  * Increasing the value deviates from straight hair to express an irregular, naturally messy silhouette.
+![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
 
-[GIF PLACEHOLDER]
-Path: gifs/02_nodes_stack_styling.gif
-Description: Clicking 'Add Clump' or 'Add Frizz' to instantly see hair change
-설명: 'Add Clump' 또는 'Add Frizz'를 클릭하여 헤어가 즉시 변하는 모습 표시
+## 6. Hair Style Nodes Stack
 
-### 3. Thickness & Noise (Defining Hair Strand Profile)
-### 3. 두께 & 노이즈 (헤어 스트랜드 프로필 정의)
+* **Add Clump**
+  * Adds a Clump node to the stack, causing hair strands to gather together around the generated guides.
+  * Used to form hair clumps, creating a more realistic and volumetric hairstyle look.
+<br>
+<br>
+* **Add Interpolate**
+  * Adds an Interpolate node to the stack, generating filled-in strands between the guide curves.
+  * Drastically increases the overall volume and density of the final hair while maintaining the guide shapes.
+<br>
+<br>
+* **Add Curl**
+  * Adds a Curl node to the stack, applying a circular, permed wave effect along the guide lines.
+  * Essential for implementing wavy textures or tightly coiled, curly hairstyle aesthetics.
+<br>
+<br>
+* **Add Frizz**
+  * Adds a Frizz node to the stack, introducing irregular and micro-vibrations across the strands.
+  * Adds a naturally unkempt texture or creates a frizzy effect where hair sticks out in all directions.
+<br>
+<br>
+* **Add Braid**
+  * Adds a Braid node to the stack, weaving multiple hair strands together into a braided pattern.
+  * Precisely develops stylized, rope-like braids or traditional braided hairstyles.
+<br>
+<br>
+* **Add Duplicate**
+  * Adds a Duplicate node to the stack, multiplying the existing curves with a structural offset.
+  * Quickly layers hair or amplifies volume as a batch without disrupting the original data flow.
+![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
 
-This panel allows fine-tuning of individual hair fiber aesthetics. Adjust Root Thickness and Tip Thickness to give strands a natural taper, and apply Frizz Noise Strength to introduce procedural strand imperfections for enhanced photorealism.
-이 패널은 개별 헤어 섬유의 미적 디테일을 미세 조정할 수 있도록 해줍니다. Root Thickness(뿌리 두께)와 Tip Thickness(끝 정점 두께)를 조절하여 스트랜드가 끝으로 갈수록 자연스럽게 가늘어지게 만들고, Frizz Noise Strength(부스스한 노이즈 강도)를 적용하여 절차적인 불규칙함을 부여함으로써 극대화된 실사 플러그를 얻을 수 있습니다.
+## 7. Realtime Simple Children
 
-How to use:
-조작법:
+* **Active Layer**
+  * Displays the name of the currently active hair layer receiving the realtime children calculation.
+  * Clarifies and locks the target layer to prevent conflicts when multiple hair systems exist.
+<br>
+<br>
+* **Target Object**
+  * Specifies the target base mesh (scalp or character body) where the guide curves will bind.
+  * Uses the eyedropper tool to directly select and bind the target mesh from the viewport.
+<br>
+<br>
+* **Bind Children Engine**
+  * Connects and activates the realtime children acceleration engine between the mesh and hair layer.
+  * Clicking this to complete the binding unlocks and links the sub-property sliders below.
+![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
+  <br>
+![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
+<br>
+<br>
+* **Child Count**
+  * Sets the number of child strands to be generated and duplicated around each parent guide curve.
+  * Key parameter for maximizing hair volume in realtime while preserving viewport performance.
+<br>
+<br>
+* **Child Point Resolution**
+  * Specifies the number of points and resolution making up a single generated child strand.
+  * Higher values result in smoother child curves but increase the realtime viewport calculation load.
+<br>
+<br>
+* **Radius**
+  * Controls the random dispersion radius where child strands spread around the parent guide curve.
+  * Smaller values bundle the strands tightly, while higher values spread them wider around the parent.
+<br>
+<br>
+* **Length Min**
+  * Sets the minimum length ratio of child strands relative to the parent guide curve length.
+  * Dropping below 1.0 introduces randomly shorter hairs among the children for a natural look.
+<br>
+<br>
+* **Length Max**
+  * Sets the maximum length ratio of child strands relative to the parent guide curve length.
+  * Adjusts the value to express stray hairs sticking out past the parent or layered hair styles.
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)  
 
-- Set Root Thickness for the base volume. (기본 볼륨을 위해 뿌리 두께를 설정합니다.)
-- Taper the ends to 0.0000 using Tip Thickness. (끝 정점 두께를 사용하여 머리 끝을 0.0000으로 날카롭게 깎아줍니다.)
-- Add micro frizz noise to break up CG neatness. (마이크로 노이즈를 추가하여 CG 특유의 인위적인 깔끔함을 깨뜨립니다.)
+## 8. Snap Settings (Geometry Nodes Precision Snap)
 
-[GIF PLACEHOLDER]
-Path: gifs/02_a_thickness_and_noise.gif
-Description: Adjusting root and tip thickness live in viewport
-설명: 뷰포트에서 실시간으로 뿌리와 끝 두께를 조절하는 모습 표시
+* **Object**
+  * Specifies the target mesh where the roots of the hair guide curves will precisely snap and bind.
+  * Uses the eyedropper tool to select the scalp or body object as the reference surface for snap calculations.
+<br>
+<br>
+* **Add Snap**
+  * Applies a precision snap system based on Geometry Nodes, overcoming the limitations of Blender's native snapping.
+  * Ensures hair roots wrap perfectly onto the surface in realtime without lifting or clipping, even during mesh deformations (simulations, shape keys, etc.)
+![GroomFlow03.png](assets/GroomFlow03.png)  
+---
 
-### 4. Realtime Simple Children Management (Performance Boost)
-### 4. 실시간 심플 칠드런 매니지먼트 (퍼포먼스 향상)
+## 9. Unreal Engine Pipeline & Expert Synergy Workflow
 
-This panel drives the ultra-performance hair multiplication layer with C-accelerated NumPy computing. It features Unique Layer Auto-Tracking, which automatically syncs the UI parameters and live brush strokes to whichever hair object you click in the viewport. It also automatically injects a "Set Hair Curve Profile" node block upon execution to prevent the hair diameter from exploding in Cycles render mode.
-이 패널은 C-가속 NumPy 연산을 통해 극대화된 퍼포먼스의 머리카락 숱 뻥튀기 레이어를 가동합니다. 뷰포트에서 클릭하는 머리카락 오브젝트에 따라 UI 파라미터와 라이브 브러시 스트로크가 자동으로 동기화되는 레이어 자동 추적 기능이 특징입니다. 또한 실행 즉시 "Set Hair Curve Profile" 노드 블록을 자동으로 주입하여 Cycles 렌더 모드에서 머리카락 지름이 폭발하는 현상을 방지합니다.
-
-How to use:
-조작법:
-
-- Select your active hair curve object in the viewport. (뷰포트에서 활성화된 헤어 커브 오브젝트를 선택합니다.)
-- Tweak Child Count, Radius, and Length Min/Max sliders live. (Child Count, Radius, Length Min/Max 슬라이더를 실시간으로 조절합니다.)
-- Tweak the values dynamically—each layer saves its settings independently. (수치를 동적으로 조절하세요. 각 레이어는 설정을 독립적으로 저장합니다.)
-
-[GIF PLACEHOLDER]
-Path: gifs/02_b_realtime_children_slider.gif
-Description: Showing unique layer auto-tracking and micro-radius control down to 0.0001
-설명: 고유 레이어 자동 추적 및 0.0001까지 내려가는 마이크로 반경 제어 표시
-
-### 5. Snap Settings (Fixing Floating Strands)
-### 5. 스냅 세팅 (공중에 붕 뜬 스트랜드 고정)
-
-When you use the Add Duplicate function to increase hair volume, the newly generated strands may float away or clipping through the scalp. The Snap Settings tool fixes this by forcefully snapping floating hair curves back down onto the target mesh surface perfectly.
-헤어 볼륨을 늘리기 위해 Add Duplicate 기능을 사용할 때, 새로 생성된 스트랜드가 공중에 떠다니거나 두피를 뚫고 파묻힐 수 있습니다. 스냅 세팅 툴은 공중에 뜬 헤어 커브를 타겟 메쉬 표면 위로 완벽하게 강제 스냅하여 이 문제를 해결합니다.
-
-How to use:
-조작법:
-
-- Select your scalp object in the picker and click Add Snap. (피커에서 두피 오브젝트를 선택하고 Add Snap을 클릭합니다.)
-
-[GIF PLACEHOLDER]
-Path: gifs/03_snap_floating_hair.gif
-Description: Hair strands floating, then snapping perfectly to the head mesh
-설명: 헤어 가닥들이 떠 있다가 머리 메쉬에 완벽하게 스냅되는 모습 표시
-
-### 6. Smooth Weights Gradient (For Low-Poly Meshes)
-### 6. 스무스 웨이트 그라디언트 (로우폴리 메쉬용)
-
-Painting smooth weight transitions on low-poly head meshes can be extremely jagged due to the lack of vertices. The Smooth Weights Gradient button forces a soft, high-fidelity weight blur across low-density topology, allowing smooth hair distribution even on low-poly dummy heads.
-정점이 부족한 로우폴리 머리 메쉬에 부드러운 웨이트 전환을 페인팅하는 것은 버텍스 부족으로 인해 매우 거칠고 계단 현상이 심할 수 있습니다. Smooth Weights Gradient 버튼은 밀도가 낮은 토폴로지 전반에 부드러운 고해상도 웨이트 블러를 강제 적용하여 로우폴리 더미 헤드에서도 부드러운 헤어 분배를 가능하게 합니다.
-
-[GIF PLACEHOLDER]
-Path: gifs/04_smooth_weights_gradient.gif
-Description: Showing jagged vertex weights becoming a buttery smooth gradient
-설명: 거친 정점 웨이트가 버터처럼 부드러운 그라디언트로 변하는 모습 표시
-
-### 7. Replace Existing Hair vs Multi-Layer Stack
-### 7. 기존 헤어 대체 vs 멀티 레이어 스택
-
-The Replace Existing Hair checkbox dictates how new hair curves behave on the same vertex group.
-Replace Existing Hair 체크박스는 동일한 버텍스 그룹에서 새로운 헤어 커브가 작동하는 방식을 결정합니다.
-
-[Checked ON]: Use this when you want to wipe the slate clean and generate a brand-new set of hair curves from scratch.
-[체크 활성화]: 기존 데이터를 깨끗이 지우고 완전히 처음부터 새로운 헤어 커브 세트를 생성하고 싶을 때 사용합니다.
-
-[Unchecked OFF]: CRITICAL FOR MULTI-LAYERING. Turn this OFF if you want to create multiple overlapping hair curve layers on the same weight mask. This allows you to stack different styles freely on a single weight group for ultimate stylistic freedom.
-[체크 해제]: 멀티 레이어링에 필수적입니다. 동일한 웨이트 마스크 위에 여러 개의 중첩된 헤어 커브 레이어를 만들고 싶다면 이 옵션을 끄세요. 이를 통해 단일 웨이트 그룹 위에 다양한 스타일을 자유롭게 쌓아 올려 극대화된 스타일의 자유도를 얻을 수 있습니다.
-
-[GIF PLACEHOLDER]
-Path: gifs/05_replace_on_vs_off.gif
-Description: Generating hair with Replace ON vs adding separate layers with Replace OFF
-설명: Replace ON 상태로 헤어를 생성하는 것과 Replace OFF 상태로 별도의 레이어를 추가하는 방식 대조 표시
-
-[Added Bonus] Recommended Expert Workflow Tips
-[추가 보너스] 추천 전문가 워크플로우 팁
-
-The Multi-Layer Strategy: Don't try to make the whole hairstyle in one layer. Create a 'Base' layer (High density, short), a 'Main' layer (Medium density, styled), and a 'Flyaway' layer (Low density, high frizz) with Replace Existing Hair turned OFF.
-멀티 레이어 전략: 전체 헤어스타일을 하나의 레이어로 만들려고 하지 마세요. Replace Existing Hair를 끈 상태에서 '베이스' 레이어 (높은 밀도, 짧은 길이), '메인' 레이어 (중간 밀도, 스타일링 적용), 그리고 '플라이어웨이' 레이어 (낮은 밀도, 높은 부스스함)를 생성하세요.
-
-Performance Tip: Lower the Strand Resolution to 4 or 6 while working on massive hairstyles, then bump it up to 12 right before exporting to Unreal Engine for maximum viewport performance.
-<<<<<<< HEAD
-퍼포먼스 팁: 방대한 헤어스타일을 작업하는 동안에는 Strand Resolution을 4 또는 6으로 낮추어 최상의 뷰포트 성능을 유지하고, 언리얼 엔진으로 내보내기 직전에 12로 올려 최고의 뷰포트 퍼포먼스를 확보하세요.
-=======
-퍼포먼스 팁: 방대한 헤어스타일을 작업하는 동안에는 Strand Resolution을 4 또는 6으로 낮추어 최상의 뷰포트 성능을 유지하고, 언리얼 엔진으로 내보내기 직전에 12로 올려 최고의 뷰포트 퍼포먼스를 확보하세요.
->>>>>>> c357b3b72d12e2ed8b16d956de997c51ad189163
+Finalize your asset data blocks and prepare your grooms for cinematic export integration.
+<br>
+<br>
+* **Global Scale Calibration (The Target Base Scale Control)**
+  * Blender and Unreal Engine handle FBX/Groom world scale matrices completely differently.
+  * Often causes imported hairstyles to explode into giant sheets or shrink into microscopic pins upon export.
+  * `Procedural Pre-Baking Calibration`:
+    * Instead of unreliably changing the raw Blender Unit or risking matrix artifacts during asset export, adjust the **Target Base Scale** slider to calibrate your groom dynamically.
+  * `Flawless Pipeline Target`:
+    * Keep it at `1.00` for standard Blender rendering setups.
+    * Set it precisely to your target engine scaling coefficient before running ultimate simulation exports.
+    * Enforces an absolute transformation sync into Unreal Engine 5.7+ New Dataflow system without altering the core mesh scales.
+<br>
+<br>
+* **Professional GroomForge Pro Synergy**
+  * Exporting hair meshes can be tricky due to world matrices mismatches across different software spaces.
+  * `Seamless Matrix Synchronization`:
+    * When paired with the **GroomForge Pro** add-on, your separated guide and child strand layers bypass all transformation conversion issues entirely.
+    * Ensures a 100% flawless, automated import layout into Unreal Engine's native Groom asset system without manual repositioning.
+<br>
+<br>
+* **Performance Tip (Resolution Management)**
+  * Optimize your setup dynamically to maintain professional-grade viewport reactivity while working on dense hair grooms.
+  * `Real-time Efficiency`:
+    * Lower the Strand Resolution down to `4` or `6` while designing massive hairstyles to maximize your viewport FPS smoothness.
+    * Simply bump it back up to `12` right before rendering final frames in Cycles or executing your absolute groom exports to Unreal Engine.

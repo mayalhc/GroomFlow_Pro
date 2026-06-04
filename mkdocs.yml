@@ -1,11 +1,6 @@
 # 사이트 설정
-<<<<<<< HEAD
 site_name: GroomFlow PRO
 site_url: https://github.com/mayalhc/blender-wiggle-2
-=======
-site_name: GroomFlow_Pro Guide
-site_url: https://github.io
->>>>>>> c357b3b72d12e2ed8b16d956de997c51ad189163
 site_author: chamiseul
 
 # 시놀로지 볼륨 매핑 경로와 일치
@@ -30,13 +25,8 @@ markdown_extensions:
 
 # 네비게이션
 nav:
-<<<<<<< HEAD
   - GroomFlow PRO Guide: index.md
   - "Go to GroomForge Wiki": integration.md
-=======
-  - GroomFlow_Pro Guide: index.md
-  # - "Go to GroomForge Wiki": integration.md
->>>>>>> c357b3b72d12e2ed8b16d956de997c51ad189163
 
 # 플러그인 설정
 plugins:
