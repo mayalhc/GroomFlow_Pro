@@ -5,8 +5,8 @@
 
 
 * **Welcome to GroomFlow Pro**
-  * Welcome to the official documentation and user guide page for GroomFlow Pro.
-  * Learn how to maximize your workflow efficiency using this advanced guide-driven asset.
+  * Welcome to the official documentation and user guide for GroomFlow Pro.
+  * Learn how to maximize your grooming workflow using this advanced guide-driven hair system.
 ![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 ---
 
@@ -20,8 +20,8 @@
 <br>
 * **Surface-Locked Strand Distribution**
   * Fixes the issue where traditional duplication setups cause strands to float above the surface or clip through the mesh, especially around eyebrows, beards, eyelashes, and high-curvature facial areas.
-  * Solves this problem with a BVHTree-powered surface projection system that continuously snaps generated strand roots directly onto the target mesh.
-  * Results in a stable, surface-locked groom where every generated strand remains accurately attached to the skin without unwanted gaps, floating roots, or penetration issues.
+  * Uses a BVHTree-powered surface projection system that snaps generated strand roots directly onto the target mesh.
+  * Every generated strand remains accurately attached to the skin without floating roots, gaps, or penetration issues.
   ![GroomFlow05.png](assets/GroomFlow05.png)
 <br>
 <br>
@@ -62,198 +62,326 @@ Before starting the workflow, make sure to set up the add-on correctly by follow
 * **Target Base Scale**
   * Sets the global base scale factor for all generated hair guide curves.
   * Prevents hair from appearing too small or large due to scene units or character mesh scale differences.
-  * Adjusts the value based on the default 1.0 to uniformly control the scale of all guide curves.
+  * Adjust this value from the default 1.0 to uniformly control the scale of all guide curves.
 ![GroomFlow_Pro_01_02.gif](assets/GroomFlow_Pro_01_02.gif)
 
-## 2. Process Control Buttons
+---
 
-* **Generate Hair Curves**
-  * Executes the 50% length blending algorithm to generate actual hair curves on the surface.
-  * This is the final output button used after completing all setups.
-  * Prevents bald spots in weight 0 areas, guaranteeing a minimum of 50% base length.
+## 2. Masking Method
+
+Before generating hair, select which masking mode to use. The two modes are completely independent and each maintains its own separate layer list.
+
+* **Vertex Weight**
+  * Uses a vertex group painted on the mesh to control where and how long hair grows.
+  * Paint red areas for full-length hair and blue areas for shorter hair or no hair.
+  * Best for organic shapes like scalp hair, eyebrows, and beard regions.
 <br>
 <br>
-* **Go to Weight Paint Mode**
-  * Instantly switches the selected mesh into 'Weight Paint Mode'.
-  * Entry point to check and manually brush dense zones (Red) or short zones (Blue).
-  * Eliminates menu navigation, allowing direct map tweaks within the creation workflow.
-![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
+* **Texture Mask**
+  * Uses a painted image texture to define the hair growth area and density.
+  * Each layer has its own texture image, allowing multiple distinct hair regions to be managed independently.
+  * Best for precise, UV-based control over hair placement — for example, fur patterns or stylized hair zones.
+
+---
+
+## 3. Generation & Masking Panel
+
+This collapsible panel contains the vertex group list when using Vertex Weight mode.
+
+* When a **mesh** is selected, the vertex group list for that mesh is displayed.
+* Use **Add / Remove** buttons to create or delete vertex weight groups.
+* The **Lock** button at the top of the list prevents accidental weight changes.
+* In **Texture Mask** mode, a note directs you to the Texture Mask Hair Layers section below.
+
+---
+
+## 4. Hair Curve Layers
+
+The Hair Curve Layers panel manages the list of generated hair objects in **Vertex Weight** mode.
+
+* Each entry in the list represents one generated hair curve object linked to a vertex group mask.
+* Use the **Up / Down** arrows to reorder layers in the stack.
+* Use **Add** to create a new empty slot, or **Remove** to delete the selected layer entry.
+* Clicking a layer in the list automatically activates the corresponding hair curve in the viewport.
+
+---
+
+## 5. Texture Mask Hair Layers
+
+This panel manages hair layers generated using **Texture Mask** mode. It works independently from the Vertex Weight layer list.
+
+* Each entry represents one hair curve object driven by a specific texture image.
+* **Add** creates a new empty texture layer slot. The slot becomes active and ready to receive a generated hair object.
+* **Remove** deletes the selected texture layer slot.
+* **Texture Mask Settings** — shows the image picker for the currently active texture layer. Assign or create the mask image here before generating.
+* **Invert Mask** — inverts the brightness values of the active mask image, flipping which areas grow hair.
+
+### Texture Mask Workflow (Step by Step)
+
+1. Switch Masking Method to **Texture Mask**.
+2. Open the **Texture Mask Hair Layers** panel.
+3. Press **Add** to create a new layer slot.
+4. In the **Texture Mask Settings** area, assign or create a mask image for this layer.
+5. Press **Go to Texture Paint Mode** to paint the mask directly on the mesh.
+6. Return to Object Mode and press **Mask Generate** to create the hair curves.
+7. Repeat from step 3 to build additional independently-masked hair layers.
+
+> Each layer must have its own image assigned before generating. Generating without an image will use any existing untitled image or report a warning.
+
+---
+
+## 6. Strand Shape Controls
+
+These settings control the shape and distribution of generated hair strands. Changing any value while a hair curve layer is active will automatically regenerate that layer in real time.
+
+* **Lock / Unlock**
+  * Locks the strand controls to prevent accidental changes after a groom is finalized.
+  * Always lock before sculpting to protect your work from being overwritten by parameter changes.
 <br>
 <br>
-* **Smooth Weights Gradient**
-  * Smooths out the boundaries of the designated weight map into a soft gradient.
-  * Sharp transitions cause abrupt length changes that look unnatural.
-  * Expands the transition zone, ensuring a smooth length gradient from 100% to 50%.
-![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
+* **Min Length**
+  * Sets the minimum length for hair grown in low-weight areas.
+  * Raising this value means even sparse areas produce longer strands.
+<br>
+<br>
+* **Max Length**
+  * Sets the maximum length for hair grown in fully-weighted (red) areas.
+  * This is the primary length control for the densest regions of the groom.
+<br>
+<br>
+* **Guide Density**
+  * Controls the total number of hair guide curves generated on the surface.
+  * Higher numbers produce denser coverage. Start lower while designing and increase for final output.
+<br>
+<br>
+* **Spawn Radius**
+  * Controls how far each generated hair root can randomly offset from the mesh surface sample point.
+  * At 0.0, roots snap precisely to the surface. Increasing the value spreads roots into a wider area.
+<br>
+<br>
+* **Weight Threshold**
+  * Sets the minimum weight value required for a point on the mesh to spawn hair.
+  * Raising this cuts off hair in lighter-weight zones. Lowering it below 0.01 ignores weights and spawns uniformly.
+<br>
+<br>
+* **Strand Resolution**
+  * Specifies the number of control points making up a single hair strand.
+  * Higher values produce smoother, more flexible curves but increase memory and viewport load.
+![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
 
 !!! warning
-    * **Never Modify Properties After Editing Curves**
-      * NEVER change the property control values (Density, Length, etc.) in the panel after manually editing or sculpting the generated hair curves.
-      * Changing any value forces the algorithm to recalculate and respawn the hair from scratch, completely wiping out your custom sculpt and guide edits.
-      <br>
-    * **Enforce Lock Feature in Sculpt Mode**
-      * Always activate the 'Lock' feature before entering Sculpt Mode to protect your custom hair groom data.
-      * The Lock feature acts as a crucial safety mechanism to prevent accidental parameter tweaks from vaporizing your manual editing progress.
+    * **Never Modify Properties After Manually Sculpting Curves**
+      * Changing any Strand Shape value forces a complete regeneration of the hair, overwriting all sculpt edits.
+      * Always use the **Lock** button before entering Sculpt Mode to prevent accidental overwrites.
 
+---
 
-## 3. Generation Options
+## 7. Thickness & Noise Settings
+
+* **Min Root Thickness**
+  * Sets the minimum thickness for the root area of generated strands, applied in low-weight zones.
+<br>
+<br>
+* **Max Root Thickness**
+  * Sets the maximum thickness for the root area of generated strands, applied in high-weight zones.
+<br>
+<br>
+* **Tip Thickness**
+  * Controls the thickness at the very tip of each strand. Set near 0.0 for a natural tapered look.
+<br>
+<br>
+* **Frizz Noise Strength**
+  * Adds random directional noise to each strand, creating a naturally messy or frizzy appearance.
+  * Higher values produce more chaotic, irregular silhouettes.
+![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
+
+---
+
+## 8. Hair Style Nodes Stack
+
+Attach Blender geometry node modifiers to the active hair curve to shape the final look. Each button loads the corresponding node group from Blender's built-in Hair Essentials library.
+
+* **Add Clump**
+  * Pulls groups of strands together toward common cluster points, creating natural hair clumping.
+<br>
+<br>
+* **Add Frizz**
+  * Adds high-frequency noise breakup to individual strands for a naturally rough or frizzy texture.
+<br>
+<br>
+* **Add Interpolate**
+  * Fills in additional strands between existing guides, dramatically increasing visible density.
+<br>
+<br>
+* **Add Duplicate**
+  * Scatters offset copies of each strand to build up volume quickly without adding new guides.
+<br>
+<br>
+* **Add Braid**
+  * Weaves strands into a braided rope pattern for stylized braid or twist effects.
+<br>
+<br>
+* **Add Curl**
+  * Applies a helical curl deformation along the length of each strand for curly or wavy hairstyles.
+![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
+
+---
+
+## 9. Realtime Simple Children
+
+The Children system generates a cloud of short, naturally distributed child strands around each guide curve in real time. It is designed for rapid grooming feedback — sculpt or comb the guide and child strands update instantly when the Live Engine is active.
+
+To use this panel, select a **hair curve object** in the viewport. The panel will display the active layer name and its settings.
+
+### Setup
+
+* **Active Layer**
+  * Displays the name of the currently selected guide curve receiving children.
+<br>
+<br>
+* **Target Mesh**
+  * Select the body or scalp mesh that this guide curve is attached to.
+  * Use the eyedropper to pick the mesh directly from the viewport.
+  * This must be set before building children.
+
+### Buttons
+
+* **Build Children**
+  * Generates or regenerates children for the currently active guide curve.
+  * Creates a `{CurveName}_Children` object in the scene containing all child strands.
+  * Press this once per guide curve. Press again to rebuild if settings change.
+  * Each guide curve has its own independent children object.
+<br>
+<br>
+* **Live OFF / Live ON** (toggle)
+  * Toggles the real-time update engine that keeps children synchronized while sculpting.
+  * **Live ON** — the depsgraph handler watches the guide curve for changes. Every sculpt stroke or comb action immediately updates the child strand positions.
+  * **Live OFF** — the engine stops watching. Child strands remain frozen at their last computed position. Use this when the groom is finalized and no further sculpting is needed.
+  * The Live Engine is shared across all guide curves. Turn it on when actively grooming, off when not.
+
+### Recommended Workflow for Multiple Guide Curves
+
+1. Select guide curve 1 → set Target Mesh → press **Build Children**.
+2. Select guide curve 2 → set Target Mesh → press **Build Children**.
+3. Continue for all guide curves.
+4. When ready to sculpt, press **Live ON** — all built children will update in real time.
+5. When done sculpting, press **Live OFF** to freeze the result.
+
+> **Important:** Build Children and Live Engine are separate actions. You can build children for all curves first, then enable Live once. You do not need to turn the engine on and off between each curve.
+
+![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
+  <br>
+![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
+
+### Child Strand Settings
+
+* **Child Count**
+  * Number of child strands generated per guide curve.
+  * Higher values produce denser hair volume. Balance against viewport performance.
+<br>
+<br>
+* **Child Point Resolution**
+  * Number of control points per child strand. Higher values make smoother curves.
+<br>
+<br>
+* **Radius**
+  * The spread radius around the guide root where child roots are distributed.
+  * Small values keep children tightly grouped; large values spread them wide.
+<br>
+<br>
+* **Length Min**
+  * Minimum length ratio of child strands relative to the parent guide. Values below 1.0 create naturally varied shorter hairs.
+<br>
+<br>
+* **Length Max**
+  * Maximum length ratio relative to the parent guide. Values above 1.0 allow some children to extend beyond the guide tip.
+
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+
+### Clump Settings
+
+Controls how child strands pull toward the guide curve's tip, forming natural hair clumps.
+
+* **Clump** — overall strength of the clumping pull toward the guide tip.
+* **Clump Start** — point along the strand where clumping begins (0 = root, 1 = tip).
+* **Clump Shape** — curve shape of the clumping falloff. Positive values flare at the base; negative values tighten toward the tip.
+* **Clump Noise** — adds random per-strand variation to break up uniform clumping patterns.
+* **Clump Twist** — rotates child strands around the guide axis as they clump, creating a spiral wrap effect.
+* **Clump Offset** — offsets the clumping anchor point along the guide for fine-tuned control.
+
+### Root Distribution Settings
+
+Controls where child strand roots are placed relative to the guide root.
+
+* **Root Spread** — radius of the disk area around the guide root where children are scattered. At 0.0, all children start exactly at the guide root.
+* **Spread Along Guide** — when Root Spread is greater than 0, this blends the distribution between a flat disk (0.0) and a spread that follows the guide direction (1.0).
+* **Root Seed** — random seed for the child root placement pattern. Change this to get a different arrangement without changing any other settings.
+
+---
+
+## 10. Generation Options
 
 * **Replace Existing Hair**
-  * Automatically deletes and overwrites previous hair curves in the active layer when generating new ones.
-  * Unchecking this option preserves existing hair, allowing you to layer and stack new curves on top.
+  * When enabled, generating hair overwrites the curves in the currently active layer.
+  * When disabled, each generation creates an entirely new layer on top of existing ones.
+  * Leave this enabled during normal grooming to avoid accumulating redundant objects.
 ![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
 <br>
 <br>
 * **Generate on Vertices**
-  * Snaps and generates hair guide curves precisely on the vertices of the mesh instead of the face areas.
-  * Useful for low-poly assets or specialized grooms that require perfectly aligned hair placement based on vertex layouts.
+  * Snaps and generates hair guide curve roots precisely onto mesh vertices instead of face surfaces.
+  * Useful for low-poly assets or grooms that require roots to align exactly with the mesh topology.
 ![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
 
-## 4. Hair Settings & Property Controls
-
-* **Min Length**
-  * Sets the minimum length limit for hair generated in the lowest weight areas (0.0).
-  * Lower values shorten hair in blue areas, guaranteeing 50% of the maximum length based on the current algorithm.
-<br>
-<br>
-* **Max Length**
-  * Sets the maximum length for hair generated in the highest weight areas (1.0).
-  * Functions as the baseline value determining the hair length in key zones painted in red.
-<br>
-<br>
-* **Guide Density**
-  * Controls the total target count of hair guide curves to be generated on the mesh surface.
-  * Higher numbers spawn denser guides, determining the overall volume and density.
-<br>
-<br>
-* **Spawn Radius**
-  * Controls the random dispersion radius around the vertices where each guide curve is generated.
-  * At 0.0, it precisely snaps to the surface; increasing the value spreads the spawn positions wider.
-<br>
-<br>
-* **Weight Threshold**
-  * Sets the minimum threshold cutoff filter of the weight map for hair generation.
-  * Dropping below 0.01 ignores weights to spawn uniformly; raising it cuts off zones below the value.
-<br>
-<br>
-* **Strand Resolution**
-  * Specifies the number of segments (points) and resolution making up a single hair curve.
-  * Higher values result in smoother and more flexible curves but impact calculation and viewport performance.
-![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
-
-## 5. Thickness & Noise Settings
-
-* **Min Root Thickness**
-  * Globally sets the minimum thickness for the root section of the guide curves.
-  * Used as the lower boundary reference when expressing fine or thin hairs.
-<br>
-<br>
-* **Max Root Thickness**
-  * Globally sets the maximum thickness for the root section of the guide curves.
-  * Used to define coarse hair or thick foundational guidelines.
-<br>
-<br>
-* **Tip Thickness**
-  * Adjusts the thickness of the hair ends corresponding to the absolute tip of the guide curves.
-  * Typically set near 0.0 to create a tapering effect that sharpens toward the end.
-<br>
-<br>
-* **Frizz Noise Strength**
-  * Controls the global noise deformation strength that adds a curly or frizzy feel to the hairstyle.
-  * Increasing the value deviates from straight hair to express an irregular, naturally messy silhouette.
-![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
-
-## 6. Hair Style Nodes Stack
-
-* **Add Clump**
-  * Adds a Clump node to the stack, causing hair strands to gather together around the generated guides.
-  * Used to form hair clumps, creating a more realistic and volumetric hairstyle look.
-<br>
-<br>
-* **Add Interpolate**
-  * Adds an Interpolate node to the stack, generating filled-in strands between the guide curves.
-  * Drastically increases the overall volume and density of the final hair while maintaining the guide shapes.
-<br>
-<br>
-* **Add Curl**
-  * Adds a Curl node to the stack, applying a circular, permed wave effect along the guide lines.
-  * Essential for implementing wavy textures or tightly coiled, curly hairstyle aesthetics.
-<br>
-<br>
-* **Add Frizz**
-  * Adds a Frizz node to the stack, introducing irregular and micro-vibrations across the strands.
-  * Adds a naturally unkempt texture or creates a frizzy effect where hair sticks out in all directions.
-<br>
-<br>
-* **Add Braid**
-  * Adds a Braid node to the stack, weaving multiple hair strands together into a braided pattern.
-  * Precisely develops stylized, rope-like braids or traditional braided hairstyles.
-<br>
-<br>
-* **Add Duplicate**
-  * Adds a Duplicate node to the stack, multiplying the existing curves with a structural offset.
-  * Quickly layers hair or amplifies volume as a batch without disrupting the original data flow.
-![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
-
-## 7. Realtime Simple Children
-
-* **Active Layer**
-  * Displays the name of the currently active hair layer receiving the realtime children calculation.
-  * Clarifies and locks the target layer to prevent conflicts when multiple hair systems exist.
-<br>
-<br>
-* **Target Object**
-  * Specifies the target base mesh (scalp or character body) where the guide curves will bind.
-  * Uses the eyedropper tool to directly select and bind the target mesh from the viewport.
-<br>
-<br>
-* **Bind Children Engine**
-  * Connects and activates the realtime children acceleration engine between the mesh and hair layer.
-  * Clicking this to complete the binding unlocks and links the sub-property sliders below.
-![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
-  <br>
-![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
-<br>
-<br>
-* **Child Count**
-  * Sets the number of child strands to be generated and duplicated around each parent guide curve.
-  * Key parameter for maximizing hair volume in realtime while preserving viewport performance.
-<br>
-<br>
-* **Child Point Resolution**
-  * Specifies the number of points and resolution making up a single generated child strand.
-  * Higher values result in smoother child curves but increase the realtime viewport calculation load.
-<br>
-<br>
-* **Radius**
-  * Controls the random dispersion radius where child strands spread around the parent guide curve.
-  * Smaller values bundle the strands tightly, while higher values spread them wider around the parent.
-<br>
-<br>
-* **Length Min**
-  * Sets the minimum length ratio of child strands relative to the parent guide curve length.
-  * Dropping below 1.0 introduces randomly shorter hairs among the children for a natural look.
-<br>
-<br>
-* **Length Max**
-  * Sets the maximum length ratio of child strands relative to the parent guide curve length.
-  * Adjusts the value to express stray hairs sticking out past the parent or layered hair styles.
-![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)  
-
-## 8. Snap Settings (Geometry Nodes Precision Snap)
-
-* **Object**
-  * Specifies the target mesh where the roots of the hair guide curves will precisely snap and bind.
-  * Uses the eyedropper tool to select the scalp or body object as the reference surface for snap calculations.
-<br>
-<br>
-* **Add Snap**
-  * Applies a precision snap system based on Geometry Nodes, overcoming the limitations of Blender's native snapping.
-  * Ensures hair roots wrap perfectly onto the surface in realtime without lifting or clipping, even during mesh deformations (simulations, shape keys, etc.)
-![GroomFlow03.png](assets/GroomFlow03.png)  
 ---
 
-## 9. Unreal Engine Pipeline & Expert Synergy Workflow
+## 11. Process Control Buttons
+
+### Vertex Weight Mode
+
+* **Weight Generate**
+  * Runs the hair generation algorithm using the active vertex weight group as the mask.
+  * Generates hair strands directly onto the mesh surface based on painted weight values.
+  * Red areas produce full-length hair; lower-weight areas produce shorter or no hair.
+<br>
+<br>
+* **Go to Weight Paint Mode**
+  * Switches the active mesh into Weight Paint Mode for direct vertex weight editing.
+  * Paint red (weight 1.0) for dense, full-length hair and blue (weight 0.0) to suppress hair.
+<br>
+<br>
+* **Smooth Weights Gradient**
+  * Softens sharp transitions in the active weight map into a smooth gradient.
+  * Prevents abrupt length changes at the boundary between painted and unpainted areas.
+
+![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
+![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
+
+### Texture Mask Mode
+
+* **Mask Generate**
+  * Generates hair using the active texture layer's image as the mask.
+  * Bright (white) areas in the image produce hair; dark (black) areas suppress it.
+<br>
+<br>
+* **Go to Texture Paint Mode**
+  * Switches the active mesh into Texture Paint Mode with the active mask image pre-selected.
+  * Paint white to add hair and black to remove it.
+
+---
+
+## 12. Snap Settings
+
+* **Add Snap**
+  * Applies a Geometry Nodes-based precision snap system to the active hair curve.
+  * Keeps hair roots locked to the mesh surface, preventing floating or clipping even when the mesh deforms (shape keys, simulations, etc.).
+  * Requires a hair curve to be selected. The Target Mesh must be set in the Children panel first.
+
+![GroomFlow03.png](assets/GroomFlow03.png)
+
+---
+
+## 13. Unreal Engine Pipeline & Expert Synergy Workflow
 
 Finalize your asset data blocks and prepare your grooms for cinematic export integration.
 <br>
@@ -270,7 +398,7 @@ Finalize your asset data blocks and prepare your grooms for cinematic export int
 <br>
 <br>
 * **Professional GroomForge Pro Synergy**
-  * Exporting hair meshes can be tricky due to world matrices mismatches across different software spaces.
+  * Exporting hair meshes can be tricky due to world matrix mismatches across different software spaces.
   * `Seamless Matrix Synchronization`:
     * When paired with the **GroomForge Pro** add-on, your separated guide and child strand layers bypass all transformation conversion issues entirely.
     * Ensures a 100% flawless, automated import layout into Unreal Engine's native Groom asset system without manual repositioning.
