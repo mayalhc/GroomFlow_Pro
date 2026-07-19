@@ -10,6 +10,20 @@
 ![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 ---
 
+## 🆕 What's New in v1.5.0
+
+* **Faster Children — noticeably lighter on the viewport**
+  * The realtime Children engine got a substantial performance pass this release. Sculpting, combing, and simulating with children active should all feel noticeably lighter, especially with high Child Count or many guide curves.
+  * These are internal engine improvements — no settings changed, no new steps required. Just Build Children as usual and enjoy the improved responsiveness.
+<br>
+<br>
+* **Live Engine — Passive Follow while Live is OFF**
+  * The single biggest change this release: children now keep following the guide curve even when the **Live** toggle is switched OFF.
+  * Turn on Blender's native Hair Dynamics on a guide curve, or play back an animated character, and the children will move along with it — without the Live Engine needing to run in the background.
+  * This means **Live ON** is now reserved for the moments you're actively sculpting or combing and need full clump/twist detail recalculated in real time. Once you're done shaping, switch **Live OFF** — the groom won't freeze, it will keep following any simulation or animation applied to the guide, at essentially zero extra cost.
+  * See **Section 9. Realtime Simple Children** below for the full breakdown of Build Children vs. Live ON vs. Passive Follow.
+---
+
 ## 🚀 Key Features Guide
 
 * **Guide-Based Strand Generation**
@@ -229,7 +243,7 @@ Attach Blender geometry node modifiers to the active hair curve to shape the fin
 
 ## 9. Realtime Simple Children
 
-The Children system generates a cloud of short, naturally distributed child strands around each guide curve in real time. It is designed for rapid grooming feedback — sculpt or comb the guide and child strands update instantly when the Live Engine is active.
+The Children system generates a cloud of short, naturally distributed child strands around each guide curve. As of v1.5.0, children stay synchronized with the guide in two complementary ways — a lightweight always-on follow, and an optional precise live recompute — so you get real-time feedback without paying the full performance cost all the time.
 
 To use this panel, select a **hair curve object** in the viewport. The panel will display the active layer name and its settings.
 
@@ -248,24 +262,33 @@ To use this panel, select a **hair curve object** in the viewport. The panel wil
 
 * **Build Children**
   * Generates or regenerates children for the currently active guide curve.
-  * Creates a `{CurveName}_Children` object in the scene containing all child strands.
-  * Press this once per guide curve. Press again to rebuild if settings change.
+  * Creates a `{CurveName}_Children` object in the scene containing all child strands, already surface-bound to the Target Mesh.
+  * Also attaches a lightweight follow modifier that keeps children glued to whatever the guide is currently doing — see **Passive Follow** below.
+  * Press this once per guide curve. Press again to rebuild if Child Count, Radius, Clump, or Root Distribution settings change.
   * Each guide curve has its own independent children object.
 <br>
 <br>
 * **Live OFF / Live ON** (toggle)
-  * Toggles the real-time update engine that keeps children synchronized while sculpting.
-  * **Live ON** — the depsgraph handler watches the guide curve for changes. Every sculpt stroke or comb action immediately updates the child strand positions.
-  * **Live OFF** — the engine stops watching. Child strands remain frozen at their last computed position. Use this when the groom is finalized and no further sculpting is needed.
-  * The Live Engine is shared across all guide curves. Turn it on when actively grooming, off when not.
+  * Toggles the precise real-time recompute engine used while actively sculpting or combing.
+  * **Live ON** — clump, twist, and root-scatter are fully recalculated every time the guide changes. Use this while you are actively shaping the groom with sculpt tools.
+  * **Live OFF** — the recompute engine stops running. Children are not frozen, though — see below.
+  * The Live Engine is shared across all guide curves. Turn it on while grooming, off when you're done shaping and just want to preview motion or simulation.
+
+### Passive Follow — children keep moving even with Live OFF
+
+Every time **Build Children** runs, a small geometry-node modifier (`GF_ChildrenGuideFollow`) is attached to the children object. It reads the guide's current position directly from Blender's own dependency graph and offsets the children to match — no Python code runs for this, so it costs virtually nothing.
+
+This means: if you turn on Blender's native **Hair Dynamics** simulation on the guide curve, or simply play back an animation that poses the character, the children will follow along even with Live OFF. This is the intended way to preview simulation or animation — leave Live OFF, let Passive Follow carry the motion, and only switch Live ON again when you want to re-shape the clump/twist detail by hand.
+
+> Passive Follow moves each child strand rigidly along with its guide's root — it does not re-run the clump/twist math. For that, use Live ON.
 
 ### Recommended Workflow for Multiple Guide Curves
 
 1. Select guide curve 1 → set Target Mesh → press **Build Children**.
 2. Select guide curve 2 → set Target Mesh → press **Build Children**.
 3. Continue for all guide curves.
-4. When ready to sculpt, press **Live ON** — all built children will update in real time.
-5. When done sculpting, press **Live OFF** to freeze the result.
+4. While actively shaping the groom, press **Live ON** — clump/twist recompute live as you sculpt.
+5. When you're done shaping, press **Live OFF**. Children stay put, and Passive Follow keeps them attached if the guide is later simulated or animated.
 
 > **Important:** Build Children and Live Engine are separate actions. You can build children for all curves first, then enable Live once. You do not need to turn the engine on and off between each curve.
 
