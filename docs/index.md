@@ -15,18 +15,50 @@
 ![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 ---
 
-## 🆕 What's New in v1.5.0
+## 🆕 What's New in v1.6.0
 
-* **Faster Children — noticeably lighter on the viewport**
-  * The realtime Children engine got a substantial performance pass this release. Sculpting, combing, and simulating with children active should all feel noticeably lighter, especially with high Child Count or many guide curves.
-  * These are internal engine improvements — no settings changed, no new steps required. Just Build Children as usual and enjoy the improved responsiveness.
+* **GPU-Accelerated Children — around 10x faster**
+  * The realtime Children engine now runs its heavy math on your graphics card. Sculpting, combing and playing back simulation with children active are dramatically more responsive.
+  * Measured on a typical groom: a live update that took **26 ms now takes 2.5 ms**. On a heavy groom of over a million child points, **270 ms drops to 27 ms**.
+  * Nothing to switch on. GroomFlow checks your GPU when the groom is first built, and only uses it once it has confirmed the result matches. If your driver cannot handle it, the add-on quietly falls back to the CPU — the hair is always correct, never wrong-but-fast.
+  * The Children panel shows which path is in use, so you can tell at a glance.
 <br>
 <br>
-* **Live Engine — Passive Follow while Live is OFF**
-  * The single biggest change this release: children now keep following the guide curve even when the **Live** toggle is switched OFF.
-  * Turn on Blender's native Hair Dynamics on a guide curve, or play back an animated character, and the children will move along with it — without the Live Engine needing to run in the background.
-  * This means **Live ON** is now reserved for the moments you're actively sculpting or combing and need full clump/twist detail recalculated in real time. Once you're done shaping, switch **Live OFF** — the groom won't freeze, it will keep following any simulation or animation applied to the guide, at essentially zero extra cost.
-  * See **Section 9. Realtime Simple Children** below for the full breakdown of Build Children vs. Live ON vs. Passive Follow.
+* **Hair Dynamics & Collision** *(Blender 5.2 or newer)*
+  * One button attaches Blender's new XPBD hair solver to your guide curves, and another turns any mesh into a collider.
+  * All solver settings — bendiness, damping, mass, surface collision, gravity — are laid out in the GroomFlow panel, so you never have to open the node editor to tune the simulation.
+  * See **Section 9. Hair Dynamics & Collision**.
+<br>
+<br>
+* **Clump ID — with a viewport preview**
+  * Every strand now carries the ID of the clump it belongs to, written directly into the hair data at generation time.
+  * Because GroomFlow knows exactly which guide each child grew from, the grouping is exact. Other tools have to guess it by clustering root positions, which splits real clumps apart and merges unrelated ones.
+  * **Clump Size** merges neighbouring guides into bigger tufts, and **Clump Seed** reshuffles the arrangement without touching your combing.
+  * **Preview Clump IDs** colours every strand by its clump so you can actually see the grouping.
+  * See **Section 10 → Clump ID**.
+<br>
+<br>
+* **Automatic Units — no more scale guessing**
+  * GroomFlow now reads the real scale off your character and converts the sliders for you. A length of 0.5 means the same physical size on a normal Blender character and on a centimetre-authored Unreal/MetaHuman rig.
+  * This replaces the old **Target Base Scale** slider, which you had to discover and set by hand. See **Section 1. Units & Scale**.
+<br>
+<br>
+* **Guides Inside Children — one object to export**
+  * The guides can now ride along inside the children object, flagged so Unreal can tell them apart.
+  * A groom used to be two separate objects, so exporting brought two grooms into Unreal with the strands split between them. Now you export the children object alone and the whole groom arrives as one.
+<br>
+<br>
+* **Fixes**
+  * **Generating a second groom no longer resets the first one.** Adding a new weight group and pressing Generate used to rebuild the previous layer's curves in place — throwing away everything that had been sculpted or combed into them — and it did so using the *old* weight group, so the newly painted one appeared to do nothing. A Generate aimed at a different mask now creates its own layer and leaves finished grooms alone.
+  * **Spread Along Guide** had no effect at all. It works now.
+  * **Texture Mask → Mask Generate** could fail to complete. Fixed.
+  * Root placement on quad or n-gon meshes was bound to the wrong spot, so hair drifted when the character deformed. Fixed.
+  * Style node sliders (Clump, Frizz, Curl…) did nothing on Blender 5.2. Fixed.
+  * **Add Snap** could not set its target object on Blender 5.2. Fixed.
+  * Weight smoothing on a dense head mesh took tens of seconds — it is now near-instant.
+  * Pressing a style node button no longer causes a multi-second freeze.
+  * Removing a hair layer now asks first, since it deletes the curves object.
+  * Minimum supported Blender is now **4.5 LTS**. Verified on 4.5, 5.0, 5.1, 5.2 and 5.3.
 ---
 
 ## 🚀 Key Features Guide
@@ -75,14 +107,21 @@ Before starting the workflow, make sure to set up the add-on correctly by follow
 
 ---
 
-## 1. Global Scale Calibration
+## 1. Units & Scale
 
+Every length in GroomFlow — strand length, thickness, child radius — is measured in metres, and the add-on converts them to whatever scale your character is actually built at. **This is automatic; there is nothing to set for a normal groom.**
 
-* **Target Base Scale**
-  * Sets the global base scale factor for all generated hair guide curves.
-  * Prevents hair from appearing too small or large due to scene units or character mesh scale differences.
-  * Adjust this value from the default 1.0 to uniformly control the scale of all guide curves.
-![GroomFlow_Pro_01_02.gif](assets/GroomFlow_Pro_01_02.gif)
+* **Why it matters**
+  * A character exported from Unreal is authored in centimetres and then scaled down by the rig, so one metre is 100 units in its local space. A strand length of `0.5` on such a character used to come out a hundred times too short, and the hair collapsed into a speck at the scalp.
+  * GroomFlow reads the true scale off the character itself, so the same slider value gives the same real-world size on any rig.
+<br>
+<br>
+* **Units** *(in the Realtime Simple Children panel)*
+  * **Auto Detect** — the default. Reads the scale from the Target Mesh. Leave it here unless you have a reason not to.
+  * **Manual** — type the factor yourself. Use this when your mesh has a deliberate non-uniform scale that is part of the look rather than a unit mismatch, and you do not want it corrected.
+  * A line under the setting reports what was detected, for example `1:1 (metres)` or `100x (Unreal / MetaHuman, cm)`.
+
+> Upgrading from v1.5? The old **Target Base Scale** slider is gone — this replaces it and needs no input. If you had set it to something other than `1.0` to compensate for a scaled character, that compensation is now handled for you.
 
 ---
 
@@ -250,9 +289,72 @@ Attach Blender geometry node modifiers to the active hair curve to shape the fin
 
 ---
 
-## 9. Realtime Simple Children
+## 9. Hair Dynamics & Collision
 
-The Children system generates a cloud of short, naturally distributed child strands around each guide curve. As of v1.5.0, children stay synchronized with the guide in two complementary ways — a lightweight always-on follow, and an optional precise live recompute — so you get real-time feedback without paying the full performance cost all the time.
+> Requires **Blender 5.2 or newer**. On older versions the panel says so and the buttons stay inactive.
+
+Blender 5.2 introduced a new XPBD physics solver for hair. This panel wires it up for you and puts its settings where you can reach them — otherwise every adjustment means opening the node editor and digging inside a node group.
+
+### Buttons
+
+* **Hair Dynamics**
+  * Select a guide curve and press this. The solver is attached and set to collide with the mesh the hair is attached to.
+  * Press **Play** on the timeline to see it simulate.
+<br>
+<br>
+* **Collider**
+  * Select any mesh the hair should bump into — the body, a shoulder, a hat — and press this.
+  * The scalp itself does not need a collider; that is already handled by **Surface Collision** below.
+<br>
+<br>
+* **Remove Dynamics**
+  * Strips the dynamics and collider setup back off the selected objects.
+
+### Settings
+
+These appear once Hair Dynamics has been added, and update the simulation as you change them.
+
+* **Physics**
+  * On, the solver simulates. Turn it off and the hair simply follows the animation without simulating.
+<br>
+<br>
+* **Solver** — *Substeps*, *Constraint Steps*
+  * Raise these if the hair passes through the body or stretches under fast motion. Higher values cost more to compute.
+<br>
+<br>
+* **Structure**
+  * **Bendiness** — how freely the strand bends. Low is stiff hair, high is soft.
+  * **Root Bendiness** — how much it may bend right where it meets the scalp.
+  * **Stretchiness** — how much the strand may lengthen. Keep near zero for hair.
+  * **Mass**, **Friction** — weight and how much the strands drag on each other.
+  * **Linear Damping** — raise it if the hair jitters.
+  * **Angular Damping** — raise it if the hair whips around too freely.
+<br>
+<br>
+* **Collision**
+  * **Surface Collision** — keeps the hair off the mesh it grows from.
+  * **Deforming Surface** — tick this when that mesh is rigged or animated.
+  * **Surface Friction** — how much the hair slides across it.
+  * **Gravity** — the hair falls. Turn it off for stylized or zero-gravity looks.
+
+### Recommended Workflow
+
+1. Shape your guide curves first. Dynamics simulates whatever shape you give it.
+2. Select the guide curve → **Hair Dynamics**.
+3. Select the body mesh → **Collider**.
+4. Play the timeline and watch. If hair passes through the body, raise **Substeps**; if it jitters, raise **Linear Damping**.
+5. Leave **Live OFF** while previewing — the children follow the simulated guides on their own (see Passive Follow in the next section).
+
+---
+
+## 10. Realtime Simple Children
+
+The Children system generates a cloud of short, naturally distributed child strands around each guide curve. Children stay synchronized with the guide in two complementary ways — a lightweight always-on follow, and an optional precise live recompute — so you get real-time feedback without paying the full performance cost all the time.
+
+As of v1.6.0 the live recompute runs on your graphics card, roughly ten times faster than before. A status line at the top of the panel tells you which path is active:
+
+* `GPU: OPENGL / <your graphics card>` — the fast path is running.
+* `GPU: unavailable - using CPU` — GroomFlow checked your GPU, the result did not match, and it switched to the CPU. The groom is still correct, just slower.
 
 To use this panel, select a **hair curve object** in the viewport. The panel will display the active layer name and its settings.
 
@@ -316,6 +418,15 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
   * Number of control points per child strand. Higher values make smoother curves.
 <br>
 <br>
+* **Units**
+  * How the lengths below are converted to your character's scale. Leave on **Auto Detect** — see **Section 1. Units & Scale**.
+<br>
+<br>
+* **Guides Inside Children**
+  * On by default. The guide curves are carried inside the children object as well, marked so Unreal can tell which strands are guides.
+  * This is what lets you export the children object on its own and have the complete groom — guides included — arrive in Unreal as a single asset. With it off, the guides and children stay two separate objects and a groom has to be exported twice.
+<br>
+<br>
 * **Radius**
   * The spread radius around the guide root where child roots are distributed.
   * Small values keep children tightly grouped; large values spread them wide.
@@ -346,12 +457,37 @@ Controls how child strands pull toward the guide curve's tip, forming natural ha
 Controls where child strand roots are placed relative to the guide root.
 
 * **Root Spread** — radius of the disk area around the guide root where children are scattered. At 0.0, all children start exactly at the guide root.
-* **Spread Along Guide** — when Root Spread is greater than 0, this blends the distribution between a flat disk (0.0) and a spread that follows the guide direction (1.0).
+* **Spread Along Guide** — when Root Spread is greater than 0, this stretches the scatter along the direction the guide lies in, instead of an even circle. Use it for hair that is combed flat against the scalp.
 * **Root Seed** — random seed for the child root placement pattern. Change this to get a different arrangement without changing any other settings.
+
+> **Fixed in v1.6.0:** *Spread Along Guide* previously had no effect no matter what it was set to. It now works as described.
+
+### Clump ID
+
+Every strand carries the ID of the clump it belongs to, stored in the hair data itself as `clumpid`. Unreal and other groom tools read this to keep a tuft of hair together when shading and simulating.
+
+GroomFlow knows exactly which guide each child grew from, so its clump grouping is exact. Tools without that relationship have to guess it by clustering root positions, which splits real tufts apart and merges unrelated ones.
+
+* **Clump Size**
+  * How many neighbouring guides share a single clump.
+  * At `1` — the default — every guide is its own clump. Raise it to merge nearby guides into larger, chunkier tufts.
+  * Guides are grouped by where they actually sit on the head, not by the order they were created, so a clump is always a real physical tuft.
+<br>
+<br>
+* **Clump Seed**
+  * Reshuffles which guides fall into which clump. The number of clumps stays the same.
+  * **This does not regenerate your groom.** Combing, sculpting and every strand position are left exactly as they are — only the grouping changes — so you can keep trying arrangements on a finished groom.
+<br>
+<br>
+* **Preview Clump IDs** *(toggle)*
+  * Colours every strand by the clump it belongs to and switches the viewport to Material Preview so you can see it.
+  * Press it again to turn it off. The preview colour, its material and your viewport shading are all put back the way they were; the clump data itself is untouched.
+
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
 
 ---
 
-## 10. Generation Options
+## 11. Generation Options
 
 * **Replace Existing Hair**
   * When enabled, generating hair overwrites the curves in the currently active layer.
@@ -367,7 +503,7 @@ Controls where child strand roots are placed relative to the guide root.
 
 ---
 
-## 11. Process Control Buttons
+## 12. Process Control Buttons
 
 ### Vertex Weight Mode
 
@@ -402,7 +538,7 @@ Controls where child strand roots are placed relative to the guide root.
 
 ---
 
-## 12. Snap Settings
+## 13. Snap Settings
 
 * **Add Snap**
   * Applies a Geometry Nodes-based precision snap system to the active hair curve.
@@ -413,20 +549,20 @@ Controls where child strand roots are placed relative to the guide root.
 
 ---
 
-## 13. Unreal Engine Pipeline & Expert Synergy Workflow
+## 14. Unreal Engine Pipeline & Expert Synergy Workflow
 
 Finalize your asset data blocks and prepare your grooms for cinematic export integration.
 <br>
 <br>
-* **Global Scale Calibration (The Target Base Scale Control)**
-  * Blender and Unreal Engine handle FBX/Groom world scale matrices completely differently.
-  * Often causes imported hairstyles to explode into giant sheets or shrink into microscopic pins upon export.
-  * `Procedural Pre-Baking Calibration`:
-    * Instead of unreliably changing the raw Blender Unit or risking matrix artifacts during asset export, adjust the **Target Base Scale** slider to calibrate your groom dynamically.
-  * `Flawless Pipeline Target`:
-    * Keep it at `1.00` for standard Blender rendering setups.
-    * Set it precisely to your target engine scaling coefficient before running ultimate simulation exports.
-    * Enforces an absolute transformation sync into Unreal Engine 5.7+ New Dataflow system without altering the core mesh scales.
+* **Scale — now handled for you**
+  * Blender and Unreal describe world scale differently, which is why imported hair so often arrives as giant sheets or microscopic pins.
+  * As of v1.6.0 there is nothing to calibrate. GroomFlow reads the real scale off your character and builds the groom at the correct size on both a metre-based Blender character and a centimetre-authored Unreal/MetaHuman rig. See **Section 1. Units & Scale**.
+  * If a character has a deliberate non-uniform scale you want preserved, switch **Units** to **Manual** and enter the factor yourself.
+<br>
+<br>
+* **Export the children object alone**
+  * Leave **Guides Inside Children** on. The guides travel inside the children object, flagged as guides, so Unreal receives one complete groom instead of two half ones.
+  * The strands also carry **Clump ID** and their guide assignment, so Unreal's clump-based shading and simulation have the grouping GroomFlow actually used rather than a re-guessed approximation.
 <br>
 <br>
 * **Professional GroomForge Pro Synergy**
