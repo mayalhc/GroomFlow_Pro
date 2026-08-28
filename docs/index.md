@@ -1,8 +1,13 @@
-![GroomFlow01.jpg](assets/GroomFlow02.png)
+![GroomFlow01.jpg](assets/GroomFlow_B.png)
+
+🇺🇸 English | [🇰🇷 한국어](./KO_index.md)
 
 
 # 📖 GroomFlow Pro Add-on Guidebook
 
+<div align="center">
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/3SJY1sfO5JY" title="GroomFlow PRO v1.6.0 Guide New Update" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
 
 * **Welcome to GroomFlow Pro**
   * Welcome to the official documentation and user guide for GroomFlow Pro.
@@ -29,14 +34,14 @@
 * **Guide-Based Strand Generation**
   * Creates dense hair strands from a lightweight guide curve workflow without the performance limitations of traditional systems.
   * Built around a guide-to-strand generation pipeline, allowing artists to design clean guide curves while automatically generating large amounts of production-ready strands.
-![GroomFlow04.png](assets/GroomFlow04.png)
+![clumpid_01.png](assets/clumpid_01.png)
 <br>
 <br>
 * **Surface-Locked Strand Distribution**
   * Fixes the issue where traditional duplication setups cause strands to float above the surface or clip through the mesh, especially around eyebrows, beards, eyelashes, and high-curvature facial areas.
   * Uses a BVHTree-powered surface projection system that snaps generated strand roots directly onto the target mesh.
   * Every generated strand remains accurately attached to the skin without floating roots, gaps, or penetration issues.
-  ![GroomFlow05.png](assets/GroomFlow05.png)
+![clumpid_02.jpg](assets/clumpid_02.jpg)
 <br>
 <br>
 * **Optimized Production Workflow**
@@ -44,7 +49,7 @@
   * Keeps guide curves completely separated from generated output strands, providing a clean and non-destructive grooming workflow.
   * Mirrors modern professional grooming pipelines while maintaining a simple Blender-native workflow for character hair, eyebrows, facial hair, fur, and Unreal Engine groom preparation.
   * Designed to maximize visual fidelity while reducing manual cleanup and correction work during production.
-![GroomFlow06.png](assets/GroomFlow06.png)
+![clumpid_03.jpg](assets/clumpid_03.jpg)
 ---
 
 ## 🛠 Installation Guide
@@ -89,6 +94,9 @@ Before generating hair, select which masking mode to use. The two modes are comp
   * Uses a vertex group painted on the mesh to control where and how long hair grows.
   * Paint red areas for full-length hair and blue areas for shorter hair or no hair.
   * Best for organic shapes like scalp hair, eyebrows, and beard regions.
+
+![WeightPaint.png](assets/WeightPaint.png)
+
 <br>
 <br>
 * **Texture Mask**
@@ -96,6 +104,7 @@ Before generating hair, select which masking mode to use. The two modes are comp
   * Each layer has its own texture image, allowing multiple distinct hair regions to be managed independently.
   * Best for precise, UV-based control over hair placement — for example, fur patterns or stylized hair zones.
 
+![TextureMask.png](assets/TextureMask.png)
 ---
 
 ## 3. Generation & Masking Panel
