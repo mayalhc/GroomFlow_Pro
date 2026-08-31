@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><meta name="author" content="chamiseul" /><link rel="canonical" href="https://github.com/mayalhc/blender-wiggle-2/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>GroomFlow PRO</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "GroomFlow PRO Guide";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/mayalhc/blender-wiggle-2/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GroomFlow PRO
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">GroomFlow PRO Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#whats-new-in-v161">🆕 What's New in v1.6.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#key-features-guide">🚀 Key Features Guide</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-guide">🛠 Installation Guide</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-units-scale">1. Units &amp; Scale</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-masking-method">2. Masking Method</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_1"></a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-generation-masking-panel">3. Generation &amp; Masking Panel</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-hair-curve-layers">4. Hair Curve Layers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-texture-mask-hair-layers">5. Texture Mask Hair Layers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#texture-mask-workflow-step-by-step">Texture Mask Workflow (Step by Step)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-strand-shape-controls">6. Strand Shape Controls</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7-thickness-noise-settings">7. Thickness &amp; Noise Settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#8-hair-style-nodes-stack">8. Hair Style Nodes Stack</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#9-hair-dynamics-collision">9. Hair Dynamics &amp; Collision</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#buttons">Buttons</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#settings">Settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recommended-workflow">Recommended Workflow</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#10-realtime-simple-children">10. Realtime Simple Children</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#buttons_1">Buttons</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#passive-follow-children-keep-moving-even-with-live-off">Passive Follow — children keep moving even with Live OFF</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recommended-workflow-for-multiple-guide-curves">Recommended Workflow for Multiple Guide Curves</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#child-strand-settings">Child Strand Settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#clump-settings">Clump Settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#root-distribution-settings">Root Distribution Settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#clump-id">Clump ID</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#11-generation-options">11. Generation Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#12-process-control-buttons">12. Process Control Buttons</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vertex-weight-mode">Vertex Weight Mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#texture-mask-mode">Texture Mask Mode</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#13-snap-settings">13. Snap Settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#14-unreal-engine-pipeline-expert-synergy-workflow">14. Unreal Engine Pipeline &amp; Expert Synergy Workflow</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="integration/">Go to GroomForge Wiki</a>
+    <ul>
+    <li class="toctree-l2"><a class="reference internal" href="integration/#1-metabridge-dna">1. 🧬 MetaBridge DNA</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="integration/#2-groomforge-pro">2. 👑 GroomForge PRO</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="integration/#3-groomflow-pro">3. 🌊 GroomFlow PRO</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="integration/#experience-the-industry-leading-pipeline">🚀 Experience the Industry-Leading Pipeline</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GroomFlow PRO</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">GroomFlow PRO Guide</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><img alt="GroomFlow01.jpg" src="assets/GroomFlow_B.png" /></p>
+<p>🇺🇸 English | <a href="KO_index/">🇰🇷 한국어</a></p>
+<h1 id="groomflow-pro-add-on-guidebook">📖 GroomFlow Pro Add-on Guidebook</h1>
+<div align="center">
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/3SJY1sfO5JY" title="GroomFlow PRO v1.6.0 Guide New Update" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><strong>Welcome to GroomFlow Pro</strong></li>
+<li>Welcome to the official documentation and user guide for GroomFlow Pro.</li>
+<li>Learn how to maximize your grooming workflow using this advanced guide-driven hair system.
+<img alt="GroomFlow_Pro_10.gif" src="assets/GroomFlow_Pro_10.gif" /></li>
+</ul>
+<hr />
+<h2 id="whats-new-in-v161">🆕 What's New in v1.6.1</h2>
+<ul>
+<li><strong>GPU-Accelerated Children — around 10x faster</strong></li>
+<li>The realtime Children engine now runs its heavy math on your graphics card. Sculpting, combing and playing back simulation with children active are dramatically more responsive.</li>
+<li>Measured on a typical groom: a live update that took <strong>26 ms now takes 2.5 ms</strong>. On a heavy groom of over a million child points, <strong>270 ms drops to 27 ms</strong>.</li>
+<li>Nothing to switch on. GroomFlow checks your GPU when the groom is first built, and only uses it once it has confirmed the result matches. If your driver cannot handle it, the add-on quietly falls back to the CPU — the hair is always correct, never wrong-but-fast.</li>
+<li>The Children panel shows which path is in use, so you can tell at a glance.
+<br>
+<br></li>
+<li><strong>Hair Dynamics &amp; Collision</strong> <em>(Blender 5.2 or newer)</em></li>
+<li>One button attaches Blender's new XPBD hair solver to your guide curves, and another turns any mesh into a collider.</li>
+<li>All solver settings — bendiness, damping, mass, surface collision, gravity — are laid out in the GroomFlow panel, so you never have to open the node editor to tune the simulation.</li>
+<li>See <strong>Section 9. Hair Dynamics &amp; Collision</strong>.
+<br>
+<br></li>
+<li><strong>Clump ID — with a viewport preview</strong></li>
+<li>Every strand now carries the ID of the clump it belongs to, written directly into the hair data at generation time.</li>
+<li>Because GroomFlow knows exactly which guide each child grew from, the grouping is exact. Other tools have to guess it by clustering root positions, which splits real clumps apart and merges unrelated ones.</li>
+<li><strong>Clump Size</strong> merges neighbouring guides into bigger tufts, and <strong>Clump Seed</strong> reshuffles the arrangement without touching your combing.</li>
+<li><strong>Preview Clump IDs</strong> colours every strand by its clump so you can actually see the grouping.</li>
+<li>See <strong>Section 10 → Clump ID</strong>.
+<br>
+<br></li>
+<li><strong>Automatic Units — no more scale guessing</strong></li>
+<li>GroomFlow now reads the real scale off your character and converts the sliders for you. A length of 0.5 means the same physical size on a normal Blender character and on a centimetre-authored Unreal/MetaHuman rig.</li>
+<li>This replaces the old <strong>Target Base Scale</strong> slider, which you had to discover and set by hand. See <strong>Section 1. Units &amp; Scale</strong>.
+<br>
+<br></li>
+<li><strong>Guides Inside Children — one object to export</strong></li>
+<li>The guides can now ride along inside the children object, flagged so Unreal can tell them apart.</li>
+<li>A groom used to be two separate objects, so exporting brought two grooms into Unreal with the strands split between them. Now you export the children object alone and the whole groom arrives as one.
+<br>
+<br></li>
+<li><strong>Fixes</strong></li>
+<li><strong>Children no longer kink at the root.</strong> Every child strand began one point up its guide instead of at the guide's own root, and the surface snap then pulled that point back down — leaving a small hook at the base of every strand. Raising Child Length past 1.0 hid it, which is why it looked like a length problem.</li>
+<li><strong>Child Length above 1.0 really extends past the guide tip now.</strong> It used to stack every point beyond the tip onto the tip itself, folding the end of the strand over.</li>
+<li><strong>Clump Start now means what it says</strong> — the point where clumping <em>begins</em>. It previously ramped the clump to full <em>before</em> that point, so a small value squeezed the whole change into the first segment or two.</li>
+<li><strong>Texture Mask spreads evenly.</strong> Roots bunched into one region and only filled in as you raised the guide count, because the mask was applied <em>after</em> allocating samples rather than before — black areas were handed samples and then threw them away. Coverage no longer depends on the count.</li>
+<li><strong>Texture Mask is much faster on dense meshes</strong> — measured on a 65,000-triangle head, 221 ms down to 87 ms.</li>
+<li><strong>Generating a second groom no longer resets the first one.</strong> Adding a new weight group and pressing Generate used to rebuild the previous layer's curves in place — throwing away everything that had been sculpted or combed into them — and it did so using the <em>old</em> weight group, so the newly painted one appeared to do nothing. A Generate aimed at a different mask now creates its own layer and leaves finished grooms alone.</li>
+<li><strong>Spread Along Guide</strong> had no effect at all. It works now.</li>
+<li><strong>Texture Mask → Mask Generate</strong> could fail to complete. Fixed.</li>
+<li>Root placement on quad or n-gon meshes was bound to the wrong spot, so hair drifted when the character deformed. Fixed.</li>
+<li>Style node sliders (Clump, Frizz, Curl…) did nothing on Blender 5.2. Fixed.</li>
+<li><strong>Add Snap</strong> could not set its target object on Blender 5.2. Fixed.</li>
+<li>Weight smoothing on a dense head mesh took tens of seconds — it is now near-instant.</li>
+<li>Pressing a style node button no longer causes a multi-second freeze.</li>
+<li>Removing a hair layer now asks first, since it deletes the curves object.</li>
+<li>Minimum supported Blender is now <strong>4.5 LTS</strong>. Verified on 4.5 LTS, 5.0, 5.2 LTS and 5.3.</li>
+</ul>
+<hr />
+<h2 id="key-features-guide">🚀 Key Features Guide</h2>
+<ul>
+<li><strong>Guide-Based Strand Generation</strong></li>
+<li>Creates dense hair strands from a lightweight guide curve workflow without the performance limitations of traditional systems.</li>
+<li>Built around a guide-to-strand generation pipeline, allowing artists to design clean guide curves while automatically generating large amounts of production-ready strands.
+<img alt="clumpid_01.png" src="assets/clumpid_01.png" />
+<br>
+<br></li>
+<li><strong>Surface-Locked Strand Distribution</strong></li>
+<li>Fixes the issue where traditional duplication setups cause strands to float above the surface or clip through the mesh, especially around eyebrows, beards, eyelashes, and high-curvature facial areas.</li>
+<li>Uses a BVHTree-powered surface projection system that snaps generated strand roots directly onto the target mesh.</li>
+<li>Every generated strand remains accurately attached to the skin without floating roots, gaps, or penetration issues.
+<img alt="clumpid_02.jpg" src="assets/clumpid_02.jpg" />
+<br>
+<br></li>
+<li><strong>Optimized Production Workflow</strong>
+  <br></li>
+<li>Keeps guide curves completely separated from generated output strands, providing a clean and non-destructive grooming workflow.</li>
+<li>Mirrors modern professional grooming pipelines while maintaining a simple Blender-native workflow for character hair, eyebrows, facial hair, fur, and Unreal Engine groom preparation.</li>
+<li>Designed to maximize visual fidelity while reducing manual cleanup and correction work during production.
+<img alt="clumpid_03.jpg" src="assets/clumpid_03.jpg" /></li>
+</ul>
+<hr />
+<h2 id="installation-guide">🛠 Installation Guide</h2>
+<p>Before starting the workflow, make sure to set up the add-on correctly by following these steps:</p>
+<ol>
+<li><strong>Download</strong></li>
+<li>Get the latest version of the GroomFlow_Pro add-on file ready.
+<br>
+<br></li>
+<li><strong>Installation</strong></li>
+<li>Install and activate the program within Blender preferences.</li>
+<li>Follow the general Blender add-on installation guide.
+<br>
+<br></li>
+<li><strong>Install Essential Extensions</strong></li>
+<li>Go to the Extensions menu inside the add-on preferences.</li>
+<li>Click 'Install' on the recommended base extensions to unlock full functionality.
+<br>
+<br></li>
+<li><strong>Preferences</strong></li>
+<li>Adjust the options to fit your specific workspace layout.</li>
+</ol>
+<hr />
+<h2 id="1-units-scale">1. Units &amp; Scale</h2>
+<p>Every length in GroomFlow — strand length, thickness, child radius — is measured in metres, and the add-on converts them to whatever scale your character is actually built at. <strong>This is automatic; there is nothing to set for a normal groom.</strong></p>
+<ul>
+<li><strong>Why it matters</strong></li>
+<li>A character exported from Unreal is authored in centimetres and then scaled down by the rig, so one metre is 100 units in its local space. A strand length of <code>0.5</code> on such a character used to come out a hundred times too short, and the hair collapsed into a speck at the scalp.</li>
+<li>GroomFlow reads the true scale off the character itself, so the same slider value gives the same real-world size on any rig.
+<br>
+<br></li>
+<li><strong>Units</strong> <em>(in the Realtime Simple Children panel)</em></li>
+<li><strong>Auto Detect</strong> — the default. Reads the scale from the Target Mesh. Leave it here unless you have a reason not to.</li>
+<li><strong>Manual</strong> — type the factor yourself. Use this when your mesh has a deliberate non-uniform scale that is part of the look rather than a unit mismatch, and you do not want it corrected.</li>
+<li>A line under the setting reports what was detected, for example <code>1:1 (metres)</code> or <code>100x (Unreal / MetaHuman, cm)</code>.</li>
+</ul>
+<blockquote>
+<p>Upgrading from v1.5? The old <strong>Target Base Scale</strong> slider is gone — this replaces it and needs no input. If you had set it to something other than <code>1.0</code> to compensate for a scaled character, that compensation is now handled for you.</p>
+</blockquote>
+<hr />
+<h2 id="2-masking-method">2. Masking Method</h2>
+<p>Before generating hair, select which masking mode to use. The two modes are completely independent and each maintains its own separate layer list.</p>
+<ul>
+<li><strong>Vertex Weight</strong></li>
+<li>Uses a vertex group painted on the mesh to control where and how long hair grows.</li>
+<li>Paint red areas for full-length hair and blue areas for shorter hair or no hair.</li>
+<li>Best for organic shapes like scalp hair, eyebrows, and beard regions.</li>
+</ul>
+<p><img alt="WeightPaint.png" src="assets/WeightPaint.png" /></p>
+<p><br>
+<br>
+* <strong>Texture Mask</strong>
+  * Uses a painted image texture to define the hair growth area and density.
+  * Each layer has its own texture image, allowing multiple distinct hair regions to be managed independently.
+  * Best for precise, UV-based control over hair placement — for example, fur patterns or stylized hair zones.</p>
+<h2 id="_1"><img alt="TextureMask.png" src="assets/TextureMask.png" /></h2>
+<h2 id="3-generation-masking-panel">3. Generation &amp; Masking Panel</h2>
+<p>This collapsible panel contains the vertex group list when using Vertex Weight mode.</p>
+<ul>
+<li>When a <strong>mesh</strong> is selected, the vertex group list for that mesh is displayed.</li>
+<li>Use <strong>Add / Remove</strong> buttons to create or delete vertex weight groups.</li>
+<li>The <strong>Lock</strong> button at the top of the list prevents accidental weight changes.</li>
+<li>In <strong>Texture Mask</strong> mode, a note directs you to the Texture Mask Hair Layers section below.</li>
+</ul>
+<hr />
+<h2 id="4-hair-curve-layers">4. Hair Curve Layers</h2>
+<p>The Hair Curve Layers panel manages the list of generated hair objects in <strong>Vertex Weight</strong> mode.</p>
+<ul>
+<li>Each entry in the list represents one generated hair curve object linked to a vertex group mask.</li>
+<li>Use the <strong>Up / Down</strong> arrows to reorder layers in the stack.</li>
+<li>Use <strong>Add</strong> to create a new empty slot, or <strong>Remove</strong> to delete the selected layer entry.</li>
+<li>Clicking a layer in the list automatically activates the corresponding hair curve in the viewport.</li>
+</ul>
+<hr />
+<h2 id="5-texture-mask-hair-layers">5. Texture Mask Hair Layers</h2>
+<p>This panel manages hair layers generated using <strong>Texture Mask</strong> mode. It works independently from the Vertex Weight layer list.</p>
+<ul>
+<li>Each entry represents one hair curve object driven by a specific texture image.</li>
+<li><strong>Add</strong> creates a new empty texture layer slot. The slot becomes active and ready to receive a generated hair object.</li>
+<li><strong>Remove</strong> deletes the selected texture layer slot.</li>
+<li><strong>Texture Mask Settings</strong> — shows the image picker for the currently active texture layer. Assign or create the mask image here before generating.</li>
+<li><strong>Invert Mask</strong> — inverts the brightness values of the active mask image, flipping which areas grow hair.</li>
+</ul>
+<h3 id="texture-mask-workflow-step-by-step">Texture Mask Workflow (Step by Step)</h3>
+<ol>
+<li>Switch Masking Method to <strong>Texture Mask</strong>.</li>
+<li>Open the <strong>Texture Mask Hair Layers</strong> panel.</li>
+<li>Press <strong>Add</strong> to create a new layer slot.</li>
+<li>In the <strong>Texture Mask Settings</strong> area, assign or create a mask image for this layer.</li>
+<li>Press <strong>Go to Texture Paint Mode</strong> to paint the mask directly on the mesh.</li>
+<li>Return to Object Mode and press <strong>Mask Generate</strong> to create the hair curves.</li>
+<li>Repeat from step 3 to build additional independently-masked hair layers.</li>
+</ol>
+<blockquote>
+<p>Each layer must have its own image assigned before generating. Generating without an image will use any existing untitled image or report a warning.</p>
+</blockquote>
+<hr />
+<h2 id="6-strand-shape-controls">6. Strand Shape Controls</h2>
+<p>These settings control the shape and distribution of generated hair strands. Changing any value while a hair curve layer is active will automatically regenerate that layer in real time.</p>
+<ul>
+<li><strong>Lock / Unlock</strong></li>
+<li>Locks the strand controls to prevent accidental changes after a groom is finalized.</li>
+<li>Always lock before sculpting to protect your work from being overwritten by parameter changes.
+<br>
+<br></li>
+<li><strong>Min Length</strong></li>
+<li>Sets the minimum length for hair grown in low-weight areas.</li>
+<li>Raising this value means even sparse areas produce longer strands.
+<br>
+<br></li>
+<li><strong>Max Length</strong></li>
+<li>Sets the maximum length for hair grown in fully-weighted (red) areas.</li>
+<li>This is the primary length control for the densest regions of the groom.
+<br>
+<br></li>
+<li><strong>Guide Density</strong></li>
+<li>Controls the total number of hair guide curves generated on the surface.</li>
+<li>Higher numbers produce denser coverage. Start lower while designing and increase for final output.
+<br>
+<br></li>
+<li><strong>Spawn Radius</strong></li>
+<li>Controls how far each generated hair root can randomly offset from the mesh surface sample point.</li>
+<li>At 0.0, roots snap precisely to the surface. Increasing the value spreads roots into a wider area.
+<br>
+<br></li>
+<li><strong>Weight Threshold</strong></li>
+<li>Sets the minimum weight value required for a point on the mesh to spawn hair.</li>
+<li>Raising this cuts off hair in lighter-weight zones. Lowering it below 0.01 ignores weights and spawns uniformly.
+<br>
+<br></li>
+<li><strong>Strand Resolution</strong></li>
+<li>Specifies the number of control points making up a single hair strand.</li>
+<li>Higher values produce smoother, more flexible curves but increase memory and viewport load.
+<img alt="GroomFlow_Pro_08.gif" src="assets/GroomFlow_Pro_08.gif" /></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<ul>
+<li><strong>Never Modify Properties After Manually Sculpting Curves</strong></li>
+<li>Changing any Strand Shape value forces a complete regeneration of the hair, overwriting all sculpt edits.</li>
+<li>Always use the <strong>Lock</strong> button before entering Sculpt Mode to prevent accidental overwrites.</li>
+</ul>
+</div>
+<hr />
+<h2 id="7-thickness-noise-settings">7. Thickness &amp; Noise Settings</h2>
+<ul>
+<li><strong>Min Root Thickness</strong></li>
+<li>Sets the minimum thickness for the root area of generated strands, applied in low-weight zones.
+<br>
+<br></li>
+<li><strong>Max Root Thickness</strong></li>
+<li>Sets the maximum thickness for the root area of generated strands, applied in high-weight zones.
+<br>
+<br></li>
+<li><strong>Tip Thickness</strong></li>
+<li>Controls the thickness at the very tip of each strand. Set near 0.0 for a natural tapered look.
+<br>
+<br></li>
+<li><strong>Frizz Noise Strength</strong></li>
+<li>Adds random directional noise to each strand, creating a naturally messy or frizzy appearance.</li>
+<li>Higher values produce more chaotic, irregular silhouettes.
+<img alt="GroomFlow_Pro_09.gif" src="assets/GroomFlow_Pro_09.gif" /></li>
+</ul>
+<hr />
+<h2 id="8-hair-style-nodes-stack">8. Hair Style Nodes Stack</h2>
+<p>Attach Blender geometry node modifiers to the active hair curve to shape the final look. Each button loads the corresponding node group from Blender's built-in Hair Essentials library.</p>
+<ul>
+<li><strong>Add Clump</strong></li>
+<li>Pulls groups of strands together toward common cluster points, creating natural hair clumping.
+<br>
+<br></li>
+<li><strong>Add Frizz</strong></li>
+<li>Adds high-frequency noise breakup to individual strands for a naturally rough or frizzy texture.
+<br>
+<br></li>
+<li><strong>Add Interpolate</strong></li>
+<li>Fills in additional strands between existing guides, dramatically increasing visible density.
+<br>
+<br></li>
+<li><strong>Add Duplicate</strong></li>
+<li>Scatters offset copies of each strand to build up volume quickly without adding new guides.
+<br>
+<br></li>
+<li><strong>Add Braid</strong></li>
+<li>Weaves strands into a braided rope pattern for stylized braid or twist effects.
+<br>
+<br></li>
+<li><strong>Add Curl</strong></li>
+<li>Applies a helical curl deformation along the length of each strand for curly or wavy hairstyles.
+<img alt="GroomFlow_Pro_07.gif" src="assets/GroomFlow_Pro_07.gif" /></li>
+</ul>
+<hr />
+<h2 id="9-hair-dynamics-collision">9. Hair Dynamics &amp; Collision</h2>
+<blockquote>
+<p>Requires <strong>Blender 5.2 or newer</strong>. On older versions the panel says so and the buttons stay inactive.</p>
+</blockquote>
+<p>Blender 5.2 introduced a new XPBD physics solver for hair. This panel wires it up for you and puts its settings where you can reach them — otherwise every adjustment means opening the node editor and digging inside a node group.</p>
+<h3 id="buttons">Buttons</h3>
+<ul>
+<li><strong>Hair Dynamics</strong></li>
+<li>Select a guide curve and press this. The solver is attached and set to collide with the mesh the hair is attached to.</li>
+<li>Press <strong>Play</strong> on the timeline to see it simulate.
+<br>
+<br></li>
+<li><strong>Collider</strong></li>
+<li>Select any mesh the hair should bump into — the body, a shoulder, a hat — and press this.</li>
+<li>The scalp itself does not need a collider; that is already handled by <strong>Surface Collision</strong> below.
+<br>
+<br></li>
+<li><strong>Remove Dynamics</strong></li>
+<li>Strips the dynamics and collider setup back off the selected objects.</li>
+</ul>
+<h3 id="settings">Settings</h3>
+<p>These appear once Hair Dynamics has been added, and update the simulation as you change them.</p>
+<ul>
+<li><strong>Physics</strong></li>
+<li>On, the solver simulates. Turn it off and the hair simply follows the animation without simulating.
+<br>
+<br></li>
+<li><strong>Solver</strong> — <em>Substeps</em>, <em>Constraint Steps</em></li>
+<li>Raise these if the hair passes through the body or stretches under fast motion. Higher values cost more to compute.
+<br>
+<br></li>
+<li><strong>Structure</strong></li>
+<li><strong>Bendiness</strong> — how freely the strand bends. Low is stiff hair, high is soft.</li>
+<li><strong>Root Bendiness</strong> — how much it may bend right where it meets the scalp.</li>
+<li><strong>Stretchiness</strong> — how much the strand may lengthen. Keep near zero for hair.</li>
+<li><strong>Mass</strong>, <strong>Friction</strong> — weight and how much the strands drag on each other.</li>
+<li><strong>Linear Damping</strong> — raise it if the hair jitters.</li>
+<li><strong>Angular Damping</strong> — raise it if the hair whips around too freely.
+<br>
+<br></li>
+<li><strong>Collision</strong></li>
+<li><strong>Surface Collision</strong> — keeps the hair off the mesh it grows from.</li>
+<li><strong>Deforming Surface</strong> — tick this when that mesh is rigged or animated.</li>
+<li><strong>Surface Friction</strong> — how much the hair slides across it.</li>
+<li><strong>Gravity</strong> — the hair falls. Turn it off for stylized or zero-gravity looks.</li>
+</ul>
+<h3 id="recommended-workflow">Recommended Workflow</h3>
+<ol>
+<li>Shape your guide curves first. Dynamics simulates whatever shape you give it.</li>
+<li>Select the guide curve → <strong>Hair Dynamics</strong>.</li>
+<li>Select the body mesh → <strong>Collider</strong>.</li>
+<li>Play the timeline and watch. If hair passes through the body, raise <strong>Substeps</strong>; if it jitters, raise <strong>Linear Damping</strong>.</li>
+<li>Leave <strong>Live OFF</strong> while previewing — the children follow the simulated guides on their own (see Passive Follow in the next section).</li>
+</ol>
+<hr />
+<h2 id="10-realtime-simple-children">10. Realtime Simple Children</h2>
+<p>The Children system generates a cloud of short, naturally distributed child strands around each guide curve. Children stay synchronized with the guide in two complementary ways — a lightweight always-on follow, and an optional precise live recompute — so you get real-time feedback without paying the full performance cost all the time.</p>
+<p>As of v1.6.0 the live recompute runs on your graphics card, roughly ten times faster than before. A status line at the top of the panel tells you which path is active:</p>
+<ul>
+<li><code>GPU: OPENGL / &lt;your graphics card&gt;</code> — the fast path is running.</li>
+<li><code>GPU: unavailable - using CPU</code> — GroomFlow checked your GPU, the result did not match, and it switched to the CPU. The groom is still correct, just slower.</li>
+</ul>
+<p>To use this panel, select a <strong>hair curve object</strong> in the viewport. The panel will display the active layer name and its settings.</p>
+<h3 id="setup">Setup</h3>
+<ul>
+<li><strong>Active Layer</strong></li>
+<li>Displays the name of the currently selected guide curve receiving children.
+<br>
+<br></li>
+<li><strong>Target Mesh</strong></li>
+<li>Select the body or scalp mesh that this guide curve is attached to.</li>
+<li>Use the eyedropper to pick the mesh directly from the viewport.</li>
+<li>This must be set before building children.</li>
+</ul>
+<h3 id="buttons_1">Buttons</h3>
+<ul>
+<li><strong>Build Children</strong></li>
+<li>Generates or regenerates children for the currently active guide curve.</li>
+<li>Creates a <code>{CurveName}_Children</code> object in the scene containing all child strands, already surface-bound to the Target Mesh.</li>
+<li>Also attaches a lightweight follow modifier that keeps children glued to whatever the guide is currently doing — see <strong>Passive Follow</strong> below.</li>
+<li>Press this once per guide curve. Press again to rebuild if Child Count, Radius, Clump, or Root Distribution settings change.</li>
+<li>Each guide curve has its own independent children object.
+<br>
+<br></li>
+<li><strong>Live OFF / Live ON</strong> (toggle)</li>
+<li>Toggles the precise real-time recompute engine used while actively sculpting or combing.</li>
+<li><strong>Live ON</strong> — clump, twist, and root-scatter are fully recalculated every time the guide changes. Use this while you are actively shaping the groom with sculpt tools.</li>
+<li><strong>Live OFF</strong> — the recompute engine stops running. Children are not frozen, though — see below.</li>
+<li>The Live Engine is shared across all guide curves. Turn it on while grooming, off when you're done shaping and just want to preview motion or simulation.</li>
+</ul>
+<h3 id="passive-follow-children-keep-moving-even-with-live-off">Passive Follow — children keep moving even with Live OFF</h3>
+<p>Every time <strong>Build Children</strong> runs, a small geometry-node modifier (<code>GF_ChildrenGuideFollow</code>) is attached to the children object. It reads the guide's current position directly from Blender's own dependency graph and offsets the children to match — no Python code runs for this, so it costs virtually nothing.</p>
+<p>This means: if you turn on Blender's native <strong>Hair Dynamics</strong> simulation on the guide curve, or simply play back an animation that poses the character, the children will follow along even with Live OFF. This is the intended way to preview simulation or animation — leave Live OFF, let Passive Follow carry the motion, and only switch Live ON again when you want to re-shape the clump/twist detail by hand.</p>
+<blockquote>
+<p>Passive Follow moves each child strand rigidly along with its guide's root — it does not re-run the clump/twist math. For that, use Live ON.</p>
+</blockquote>
+<h3 id="recommended-workflow-for-multiple-guide-curves">Recommended Workflow for Multiple Guide Curves</h3>
+<ol>
+<li>Select guide curve 1 → set Target Mesh → press <strong>Build Children</strong>.</li>
+<li>Select guide curve 2 → set Target Mesh → press <strong>Build Children</strong>.</li>
+<li>Continue for all guide curves.</li>
+<li>While actively shaping the groom, press <strong>Live ON</strong> — clump/twist recompute live as you sculpt.</li>
+<li>When you're done shaping, press <strong>Live OFF</strong>. Children stay put, and Passive Follow keeps them attached if the guide is later simulated or animated.</li>
+</ol>
+<blockquote>
+<p><strong>Important:</strong> Build Children and Live Engine are separate actions. You can build children for all curves first, then enable Live once. You do not need to turn the engine on and off between each curve.</p>
+</blockquote>
+<p><img alt="GroomFlow_Pro_04.gif" src="assets/GroomFlow_Pro_04.gif" />
+  <br>
+<img alt="GroomFlow_Pro_05.gif" src="assets/GroomFlow_Pro_05.gif" /></p>
+<h3 id="child-strand-settings">Child Strand Settings</h3>
+<ul>
+<li><strong>Child Count</strong></li>
+<li>Number of child strands generated per guide curve.</li>
+<li>Higher values produce denser hair volume. Balance against viewport performance.
+<br>
+<br></li>
+<li><strong>Child Point Resolution</strong></li>
+<li>Number of control points per child strand. Higher values make smoother curves.
+<br>
+<br></li>
+<li><strong>Units</strong></li>
+<li>How the lengths below are converted to your character's scale. Leave on <strong>Auto Detect</strong> — see <strong>Section 1. Units &amp; Scale</strong>.
+<br>
+<br></li>
+<li><strong>Guides Inside Children</strong></li>
+<li>On by default. The guide curves are carried inside the children object as well, marked so Unreal can tell which strands are guides.</li>
+<li>This is what lets you export the children object on its own and have the complete groom — guides included — arrive in Unreal as a single asset. With it off, the guides and children stay two separate objects and a groom has to be exported twice.
+<br>
+<br></li>
+<li><strong>Radius</strong></li>
+<li>The spread radius around the guide root where child roots are distributed.</li>
+<li>Small values keep children tightly grouped; large values spread them wide.
+<br>
+<br></li>
+<li><strong>Length Min</strong></li>
+<li>Minimum length ratio of child strands relative to the parent guide. Values below 1.0 create naturally varied shorter hairs.
+<br>
+<br></li>
+<li><strong>Length Max</strong></li>
+<li>Maximum length ratio relative to the parent guide. Values above 1.0 allow some children to extend beyond the guide tip.</li>
+</ul>
+<p><img alt="GroomFlow_Pro_06.gif" src="assets/GroomFlow_Pro_06.gif" /></p>
+<h3 id="clump-settings">Clump Settings</h3>
+<p>Controls how child strands pull toward the guide curve's tip, forming natural hair clumps.</p>
+<ul>
+<li><strong>Clump</strong> — overall strength of the clumping pull toward the guide tip.</li>
+<li><strong>Clump Start</strong> — the point along the strand where clumping begins (0 = root, 1 = tip). Below this the children stay fully spread.</li>
+<li><strong>Clump Shape</strong> — how the clumping eases in between Clump Start and the tip. Low values pull the strands together early; high values hold them apart and close near the tip.</li>
+<li><strong>Clump Noise</strong> — adds random per-strand variation to break up uniform clumping patterns.</li>
+<li><strong>Clump Twist</strong> — rotates child strands around the guide axis as they clump, creating a spiral wrap effect. Negative values twist the other way.</li>
+<li><strong>Clump Offset</strong> — shifts the point the strands converge on away from the guide tip.</li>
+</ul>
+<blockquote>
+<p><strong>Changed in v1.6.0:</strong> Clump Start used to reach <em>full</em> clumping by the point it names, rather than starting there — which squeezed the whole transition into the first segment or two and left a visible hook at the root. It now behaves as described above. Grooms saved with a Clump Start above 0 will look a little looser than before; raise <strong>Clump</strong> slightly to match.</p>
+</blockquote>
+<h3 id="root-distribution-settings">Root Distribution Settings</h3>
+<p>Controls where child strand roots are placed relative to the guide root.</p>
+<ul>
+<li><strong>Root Spread</strong> — radius of the disk area around the guide root where children are scattered. At 0.0, all children start exactly at the guide root.</li>
+<li><strong>Spread Along Guide</strong> — when Root Spread is greater than 0, this stretches the scatter along the direction the guide lies in, instead of an even circle. Use it for hair that is combed flat against the scalp.</li>
+<li><strong>Root Seed</strong> — random seed for the child root placement pattern. Change this to get a different arrangement without changing any other settings.</li>
+</ul>
+<blockquote>
+<p><strong>Fixed in v1.6.0:</strong> <em>Spread Along Guide</em> previously had no effect no matter what it was set to. It now works as described.</p>
+</blockquote>
+<h3 id="clump-id">Clump ID</h3>
+<p>Every strand carries the ID of the clump it belongs to, stored in the hair data itself as <code>clumpid</code>. Unreal and other groom tools read this to keep a tuft of hair together when shading and simulating.</p>
+<p>GroomFlow knows exactly which guide each child grew from, so its clump grouping is exact. Tools without that relationship have to guess it by clustering root positions, which splits real tufts apart and merges unrelated ones.</p>
+<ul>
+<li><strong>Clump Size</strong></li>
+<li>How many neighbouring guides share a single clump.</li>
+<li>At <code>1</code> — the default — every guide is its own clump. Raise it to merge nearby guides into larger, chunkier tufts.</li>
+<li>Guides are grouped by where they actually sit on the head, not by the order they were created, so a clump is always a real physical tuft.
+<br>
+<br></li>
+<li><strong>Clump Seed</strong></li>
+<li>Reshuffles which guides fall into which clump. The number of clumps stays the same.</li>
+<li><strong>This does not regenerate your groom.</strong> Combing, sculpting and every strand position are left exactly as they are — only the grouping changes — so you can keep trying arrangements on a finished groom.
+<br>
+<br></li>
+<li><strong>Preview Clump IDs</strong> <em>(toggle)</em></li>
+<li>Colours every strand by the clump it belongs to and switches the viewport to Material Preview so you can see it.</li>
+<li>Press it again to turn it off. The preview colour, its material and your viewport shading are all put back the way they were; the clump data itself is untouched.</li>
+</ul>
+<p><img alt="GroomFlow_Pro_06.gif" src="assets/GroomFlow_Pro_06.gif" /></p>
+<hr />
+<h2 id="11-generation-options">11. Generation Options</h2>
+<ul>
+<li><strong>Replace Existing Hair</strong></li>
+<li>When enabled, generating hair overwrites the curves in the currently active layer.</li>
+<li>When disabled, each generation creates an entirely new layer on top of existing ones.</li>
+<li>Leave this enabled during normal grooming to avoid accumulating redundant objects.
+<img alt="GroomFlow_Pro_03.gif" src="assets/GroomFlow_Pro_03.gif" />
+<br>
+<br></li>
+<li><strong>Generate on Vertices</strong></li>
+<li>Snaps and generates hair guide curve roots precisely onto mesh vertices instead of face surfaces.</li>
+<li>Useful for low-poly assets or grooms that require roots to align exactly with the mesh topology.
+<img alt="GroomFlow_Pro_02.gif" src="assets/GroomFlow_Pro_02.gif" /></li>
+</ul>
+<hr />
+<h2 id="12-process-control-buttons">12. Process Control Buttons</h2>
+<h3 id="vertex-weight-mode">Vertex Weight Mode</h3>
+<ul>
+<li><strong>Weight Generate</strong></li>
+<li>Runs the hair generation algorithm using the active vertex weight group as the mask.</li>
+<li>Generates hair strands directly onto the mesh surface based on painted weight values.</li>
+<li>Red areas produce full-length hair; lower-weight areas produce shorter or no hair.
+<br>
+<br></li>
+<li><strong>Go to Weight Paint Mode</strong></li>
+<li>Switches the active mesh into Weight Paint Mode for direct vertex weight editing.</li>
+<li>Paint red (weight 1.0) for dense, full-length hair and blue (weight 0.0) to suppress hair.
+<br>
+<br></li>
+<li><strong>Smooth Weights Gradient</strong></li>
+<li>Softens sharp transitions in the active weight map into a smooth gradient.</li>
+<li>Prevents abrupt length changes at the boundary between painted and unpainted areas.</li>
+</ul>
+<p><img alt="GroomFlow_Pro_01.gif" src="assets/GroomFlow_Pro_01.gif" />
+<img alt="GroomFlow_Pro_01_01.gif" src="assets/GroomFlow_Pro_01_01.gif" /></p>
+<h3 id="texture-mask-mode">Texture Mask Mode</h3>
+<ul>
+<li><strong>Mask Generate</strong></li>
+<li>Generates hair using the active texture layer's image as the mask.</li>
+<li>Bright (white) areas in the image produce hair; dark (black) areas suppress it.
+<br>
+<br></li>
+<li><strong>Go to Texture Paint Mode</strong></li>
+<li>Switches the active mesh into Texture Paint Mode with the active mask image pre-selected.</li>
+<li>Paint white to add hair and black to remove it.</li>
+</ul>
+<hr />
+<h2 id="13-snap-settings">13. Snap Settings</h2>
+<ul>
+<li><strong>Add Snap</strong></li>
+<li>Applies a Geometry Nodes-based precision snap system to the active hair curve.</li>
+<li>Keeps hair roots locked to the mesh surface, preventing floating or clipping even when the mesh deforms (shape keys, simulations, etc.).</li>
+<li>Requires a hair curve to be selected. The Target Mesh must be set in the Children panel first.</li>
+</ul>
+<p><img alt="GroomFlow03.png" src="assets/GroomFlow03.png" /></p>
+<hr />
+<h2 id="14-unreal-engine-pipeline-expert-synergy-workflow">14. Unreal Engine Pipeline &amp; Expert Synergy Workflow</h2>
+<p>Finalize your asset data blocks and prepare your grooms for cinematic export integration.
+<br>
+<br>
+* <strong>Scale — now handled for you</strong>
+  * Blender and Unreal describe world scale differently, which is why imported hair so often arrives as giant sheets or microscopic pins.
+  * As of v1.6.0 there is nothing to calibrate. GroomFlow reads the real scale off your character and builds the groom at the correct size on both a metre-based Blender character and a centimetre-authored Unreal/MetaHuman rig. See <strong>Section 1. Units &amp; Scale</strong>.
+  * If a character has a deliberate non-uniform scale you want preserved, switch <strong>Units</strong> to <strong>Manual</strong> and enter the factor yourself.
+<br>
+<br>
+* <strong>Export the children object alone</strong>
+  * Leave <strong>Guides Inside Children</strong> on. The guides travel inside the children object, flagged as guides, so Unreal receives one complete groom instead of two half ones.
+  * The strands also carry <strong>Clump ID</strong> and their guide assignment, so Unreal's clump-based shading and simulation have the grouping GroomFlow actually used rather than a re-guessed approximation.
+<br>
+<br>
+* <strong>Professional GroomForge Pro Synergy</strong>
+  * Exporting hair meshes can be tricky due to world matrix mismatches across different software spaces.
+  * <code>Seamless Matrix Synchronization</code>:
+    * When paired with the <strong>GroomForge Pro</strong> add-on, your separated guide and child strand layers bypass all transformation conversion issues entirely.
+    * Ensures a 100% flawless, automated import layout into Unreal Engine's native Groom asset system without manual repositioning.
+<br>
+<br>
+* <strong>Performance Tip (Resolution Management)</strong>
+  * Optimize your setup dynamically to maintain professional-grade viewport reactivity while working on dense hair grooms.
+  * <code>Real-time Efficiency</code>:
+    * Lower the Strand Resolution down to <code>4</code> or <code>6</code> while designing massive hairstyles to maximize your viewport FPS smoothness.
+    * Simply bump it back up to <code>12</code> right before rendering final frames in Cycles or executing your absolute groom exports to Unreal Engine.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="integration/" class="btn btn-neutral float-right" title="Go to GroomForge Wiki">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="integration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-08-31 05:36:08.429899+00:00
+-->
