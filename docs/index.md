@@ -15,7 +15,7 @@
 ![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 ---
 
-## 🆕 What's New in v1.6.0
+## 🆕 What's New in v1.6.1
 
 * **GPU-Accelerated Children — around 10x faster**
   * The realtime Children engine now runs its heavy math on your graphics card. Sculpting, combing and playing back simulation with children active are dramatically more responsive.
@@ -49,6 +49,11 @@
 <br>
 <br>
 * **Fixes**
+  * **Children no longer kink at the root.** Every child strand began one point up its guide instead of at the guide's own root, and the surface snap then pulled that point back down — leaving a small hook at the base of every strand. Raising Child Length past 1.0 hid it, which is why it looked like a length problem.
+  * **Child Length above 1.0 really extends past the guide tip now.** It used to stack every point beyond the tip onto the tip itself, folding the end of the strand over.
+  * **Clump Start now means what it says** — the point where clumping *begins*. It previously ramped the clump to full *before* that point, so a small value squeezed the whole change into the first segment or two.
+  * **Texture Mask spreads evenly.** Roots bunched into one region and only filled in as you raised the guide count, because the mask was applied *after* allocating samples rather than before — black areas were handed samples and then threw them away. Coverage no longer depends on the count.
+  * **Texture Mask is much faster on dense meshes** — measured on a 65,000-triangle head, 221 ms down to 87 ms.
   * **Generating a second groom no longer resets the first one.** Adding a new weight group and pressing Generate used to rebuild the previous layer's curves in place — throwing away everything that had been sculpted or combed into them — and it did so using the *old* weight group, so the newly painted one appeared to do nothing. A Generate aimed at a different mask now creates its own layer and leaves finished grooms alone.
   * **Spread Along Guide** had no effect at all. It works now.
   * **Texture Mask → Mask Generate** could fail to complete. Fixed.
@@ -58,7 +63,7 @@
   * Weight smoothing on a dense head mesh took tens of seconds — it is now near-instant.
   * Pressing a style node button no longer causes a multi-second freeze.
   * Removing a hair layer now asks first, since it deletes the curves object.
-  * Minimum supported Blender is now **4.5 LTS**. Verified on 4.5, 5.0, 5.1, 5.2 and 5.3.
+  * Minimum supported Blender is now **4.5 LTS**. Verified on 4.5 LTS, 5.0, 5.2 LTS and 5.3.
 ---
 
 ## 🚀 Key Features Guide
@@ -446,11 +451,13 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 Controls how child strands pull toward the guide curve's tip, forming natural hair clumps.
 
 * **Clump** — overall strength of the clumping pull toward the guide tip.
-* **Clump Start** — point along the strand where clumping begins (0 = root, 1 = tip).
-* **Clump Shape** — curve shape of the clumping falloff. Positive values flare at the base; negative values tighten toward the tip.
+* **Clump Start** — the point along the strand where clumping begins (0 = root, 1 = tip). Below this the children stay fully spread.
+* **Clump Shape** — how the clumping eases in between Clump Start and the tip. Low values pull the strands together early; high values hold them apart and close near the tip.
 * **Clump Noise** — adds random per-strand variation to break up uniform clumping patterns.
-* **Clump Twist** — rotates child strands around the guide axis as they clump, creating a spiral wrap effect.
-* **Clump Offset** — offsets the clumping anchor point along the guide for fine-tuned control.
+* **Clump Twist** — rotates child strands around the guide axis as they clump, creating a spiral wrap effect. Negative values twist the other way.
+* **Clump Offset** — shifts the point the strands converge on away from the guide tip.
+
+> **Changed in v1.6.0:** Clump Start used to reach *full* clumping by the point it names, rather than starting there — which squeezed the whole transition into the first segment or two and left a visible hook at the root. It now behaves as described above. Grooms saved with a Clump Start above 0 will look a little looser than before; raise **Clump** slightly to match.
 
 ### Root Distribution Settings
 
