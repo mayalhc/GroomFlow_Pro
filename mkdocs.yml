@@ -29,5 +29,8 @@ nav:
   - "Go to GroomForge Wiki": integration.md
 
 # 플러그인 설정
+hooks:
+  - hooks/media.py
+
 plugins:
   - search

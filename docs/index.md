@@ -12,7 +12,7 @@
 * **Welcome to GroomFlow Pro**
   * Welcome to the official documentation and user guide for GroomFlow Pro.
   * Learn how to maximize your grooming workflow using this advanced guide-driven hair system.
-![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
+<video src="assets/GroomFlow_Pro_10.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_10.gif"></video>
 ---
 
 ## 🆕 What's New in v1.6.1
@@ -234,7 +234,7 @@ These settings control the shape and distribution of generated hair strands. Cha
 * **Strand Resolution**
   * Specifies the number of control points making up a single hair strand.
   * Higher values produce smoother, more flexible curves but increase memory and viewport load.
-![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
+<video src="assets/GroomFlow_Pro_08.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_08.gif"></video>
 
 !!! warning
     * **Never Modify Properties After Manually Sculpting Curves**
@@ -260,7 +260,7 @@ These settings control the shape and distribution of generated hair strands. Cha
 * **Frizz Noise Strength**
   * Adds random directional noise to each strand, creating a naturally messy or frizzy appearance.
   * Higher values produce more chaotic, irregular silhouettes.
-![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
+<video src="assets/GroomFlow_Pro_09.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_09.gif"></video>
 
 ---
 
@@ -290,7 +290,7 @@ Attach Blender geometry node modifiers to the active hair curve to shape the fin
 <br>
 * **Add Curl**
   * Applies a helical curl deformation along the length of each strand for curly or wavy hairstyles.
-![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
+<video src="assets/GroomFlow_Pro_07.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_07.gif"></video>
 
 ---
 
@@ -408,9 +408,9 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 
 > **Important:** Build Children and Live Engine are separate actions. You can build children for all curves first, then enable Live once. You do not need to turn the engine on and off between each curve.
 
-![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
+<video src="assets/GroomFlow_Pro_04.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_04.gif"></video>
   <br>
-![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
+<video src="assets/GroomFlow_Pro_05.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_05.gif"></video>
 
 ### Child Strand Settings
 
@@ -444,7 +444,7 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 * **Length Max**
   * Maximum length ratio relative to the parent guide. Values above 1.0 allow some children to extend beyond the guide tip.
 
-![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
 
 ### Clump Settings
 
@@ -490,7 +490,7 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * Colours every strand by the clump it belongs to and switches the viewport to Material Preview so you can see it.
   * Press it again to turn it off. The preview colour, its material and your viewport shading are all put back the way they were; the clump data itself is untouched.
 
-![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
 
 ---
 
@@ -500,13 +500,13 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * When enabled, generating hair overwrites the curves in the currently active layer.
   * When disabled, each generation creates an entirely new layer on top of existing ones.
   * Leave this enabled during normal grooming to avoid accumulating redundant objects.
-![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
+<video src="assets/GroomFlow_Pro_03.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_03.gif"></video>
 <br>
 <br>
 * **Generate on Vertices**
   * Snaps and generates hair guide curve roots precisely onto mesh vertices instead of face surfaces.
   * Useful for low-poly assets or grooms that require roots to align exactly with the mesh topology.
-![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
+<video src="assets/GroomFlow_Pro_02.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_02.gif"></video>
 
 ---
 
@@ -529,8 +529,8 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * Softens sharp transitions in the active weight map into a smooth gradient.
   * Prevents abrupt length changes at the boundary between painted and unpainted areas.
 
-![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
-![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
+<video src="assets/GroomFlow_Pro_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01.gif"></video>
+<video src="assets/GroomFlow_Pro_01_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01_01.gif"></video>
 
 ### Texture Mask Mode
 
