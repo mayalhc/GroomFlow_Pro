@@ -12,58 +12,144 @@
 * **Welcome to GroomFlow Pro**
   * Welcome to the official documentation and user guide for GroomFlow Pro.
   * Learn how to maximize your grooming workflow using this advanced guide-driven hair system.
-<video src="assets/GroomFlow_Pro_10.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_10.gif"></video>
+![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 ---
 
-## 🆕 What's New in v1.6.1
+## 🆕 What's New in v1.8.1 (Performance)
 
-* **GPU-Accelerated Children — around 10x faster**
-  * The realtime Children engine now runs its heavy math on your graphics card. Sculpting, combing and playing back simulation with children active are dramatically more responsive.
-  * Measured on a typical groom: a live update that took **26 ms now takes 2.5 ms**. On a heavy groom of over a million child points, **270 ms drops to 27 ms**.
-  * Nothing to switch on. GroomFlow checks your GPU when the groom is first built, and only uses it once it has confirmed the result matches. If your driver cannot handle it, the add-on quietly falls back to the CPU — the hair is always correct, never wrong-but-fast.
-  * The Children panel shows which path is in use, so you can tell at a glance.
+* **NEW: Pin the Tied Region during Hair Dynamics (Blender 5.2+)**
+  * Only the stretch of hair a tie grips stays pinned now - not the whole
+    curve. The pin peaks at full strength exactly where the tie grips and
+    fades smoothly to nothing toward root and tip, so the free lengths
+    either side keep simulating.
+  * Each tie gets a **Pin Width** slider (select the tie to see it): 0.25
+    holds the middle half of the strand, 0.5 holds everything but the very
+    ends.
+  * The solver's own state is never touched: the pin lives in the Hair
+    Dynamics node wrapper as a per-point mask (`gf_pin`) written from the
+    ties, so there is nothing to reset and no per-frame Python.
+  * Toggle it with **Pin Tied Strands** in the Hair Dynamics settings.
+    Untying a tie unpins its strands automatically. Grooms whose dynamics
+    were attached before this update - or whose wrapper was wired by hand
+    and broke - get the whole thing rebuilt from scratch by the new
+    **Rebuild Dynamics** button (settings are kept, and the children's
+    wrapper is rebuilt with it).
+* **Fix: "Build Children" did nothing with the Live Engine off**
+  * The one-shot build path stood down behind the live-engine guard, so with
+    Live toggled off it created the children object and computed nothing.
+    Build now always computes.
+* **Generation is much faster**
+  * The per-point Python loop that filled every strand (100k+ iterations on a
+    5k-guide groom) is now a handful of numpy operations, and the evaluated
+    pose is applied to the build mesh with `foreach_set` instead of two
+    per-vertex loops.
+* **Live engine ticks are lighter**
+  * GPU input textures are re-uploaded only when their data actually changes
+    (the RNG table and surface normals now upload ~never during playback),
+    the guide-follow attributes are rewritten only when guide roots move,
+    slider drags coalesce into one deferred rebuild instead of one per drag
+    event, and the depsgraph update list is scanned once per pass instead of
+    once per guide.
+* **Scene-wide scans removed from the hot path**
+  * Tie orphan cleanup now runs only when something was deleted (plus load
+    and undo) instead of on every depsgraph update; the braid panel computes
+    its guide distances once per redraw instead of three times; texture-mask
+    generation no longer copies the entire image pixel buffer just to force
+    an update; fur strand lengths use a cheap deterministic hash instead of
+    building a random generator per strand.
+
+---
+
+## 🆕 What's New in v1.8.0
+
+* **Editing a generation control no longer resets your groom**
+  * This is the big one. Changing Guide Density, Length, Resolution - any
+    generation setting - rebuilds the groom, and until now that rebuild threw
+    away every comb stroke, every cut and every braid. Which meant that in
+    practice you could not touch those controls again once you had started
+    working.
+  * **Keep My Edits** carries your work across the rebuild. Your offsets are
+    lifted off before it and put back on after, so the groom is regenerated
+    with the new settings and still combed the way you left it.
+  * With the guide count unchanged they go back **exactly** - measured over
+    twenty rebuilds with a braid running, the groom did not drift at all. When
+    you raise the density, the new guides take the shape of their nearest
+    neighbours, so they come out combed rather than standing straight up.
+  * **Thickness does not rebuild at all any more.** Vertex Min/Max and Tip
+    Thickness only write the strand radius, so they are applied in place -
+    not a single point moves.
+  * See **Section 12 → Keeping Your Work When Settings Change**.
 <br>
 <br>
-* **Hair Dynamics & Collision** *(Blender 5.2 or newer)*
-  * One button attaches Blender's new XPBD hair solver to your guide curves, and another turns any mesh into a collider.
-  * All solver settings — bendiness, damping, mass, surface collision, gravity — are laid out in the GroomFlow panel, so you never have to open the node editor to tune the simulation.
+* **Braid**
+  * Braids the hair you have already combed. Put the 3D cursor where the braid
+    should start, press **Add Braid**, and the strands that pass through that
+    point are gathered into three bundles and woven around each other.
+  * It works on the guides, so the children follow it the same way they follow
+    combing — nothing about the way you build a groom changes.
+  * **Knot Tightness** pinches the braid where the strands cross, which is most
+    of what makes hair read as braided rather than as a rope.
+  * **Tail Length**, **Tail Cinch** and **Tail Relax** tie the braid off and let
+    what is left hang loose below the tie.
+  * **Twist** and **Roundness** decide how round it looks. A plait is naturally
+    flat — wide from the front, thin from the side — and these are what give it
+    an even silhouette from every angle.
+  * **Hold Under Simulation** keeps the braid woven while Hair Dynamics runs.
+    Blender simulates every guide as an independent strand and nothing in the
+    solver knows the three bundles are interlocked, so without this a braid
+    comes apart a few frames in.
+  * **Set 3 Clump IDs** gives the braided hair Clump IDs 1, 2 and 3 — one per
+    strand of the plait.
+  * See **Section 10 → Braid**.
+<br>
+<br>
+* **Hair Cut**
+  * Put a plane - or any object - where the hair should end and press **Cut**.
+    Every strand that crosses it stops there.
+  * A mesh cuts along its actual surface, so a plane only cuts the hair it
+    covers, the way scissors do. Anything else cuts along its own Z plane.
+  * **Jitter** breaks the cut line up, because a real haircut is not a laser.
+  * See **Section 10 → Hair Cut**.
+<br>
+<br>
+* **Make Groom Base** *(for MetaHuman and Unreal characters)*
+  * One button duplicates the character's mesh as something you can actually
+    groom on: the same surface in the same place, at scale 1, with no rig and
+    no shape keys. Weights, UVs and materials come across; the original is left
+    alone.
+  * Blender's hair solver blows up on a rig scaled 0.01 - the same hair
+    stretched 192x in twenty frames there and 1.00x on a base.
+  * See **Section 1 → Make Groom Base**.
+<br>
+<br>
+* **Mirror Weights, and painting both sides at once**
+  * Blender's own symmetry cannot pair the vertices of a sculpted head, so it
+    silently does nothing. GroomFlow pairs them itself, with a tolerance.
+  * **Auto Mirror While Painting** copies each stroke onto the other side a
+    moment after it lands.
+  * See **Section 2 → Mirroring a Mask**.
+<br>
+<br>
+* **Units — moved to the top of the panel**
+  * It has to be settled before the first groom, and it used to be reachable only after the children were set up. It is at the top of the GroomFlow panel now.
+  * **Guides, children, braid and texture masks all use the same unit now.** Previously only the children generator read this setting.
+  * See **Section 1. Units & Scale**.
+<br>
+<br>
+* **Root Clump**
+  * A second clump profile that grips the hair near the scalp and lets go
+    further down, on top of whatever the main Clump is doing.
+  * Use it to close the roots of a groom whose lengths are meant to stay loose.
+  * **Root Clump End** sets how far down the grip reaches.
+<br>
+<br>
+* **Apply Simulation to Guides**
+  * Blender's hair solver has no *apply*, so a pose you liked was only ever
+    visible while the frame stood still. This writes the simulated shape into
+    the guides.
+  * From there it is an ordinary groom again — comb it, braid it, export it.
   * See **Section 9. Hair Dynamics & Collision**.
-<br>
-<br>
-* **Clump ID — with a viewport preview**
-  * Every strand now carries the ID of the clump it belongs to, written directly into the hair data at generation time.
-  * Because GroomFlow knows exactly which guide each child grew from, the grouping is exact. Other tools have to guess it by clustering root positions, which splits real clumps apart and merges unrelated ones.
-  * **Clump Size** merges neighbouring guides into bigger tufts, and **Clump Seed** reshuffles the arrangement without touching your combing.
-  * **Preview Clump IDs** colours every strand by its clump so you can actually see the grouping.
-  * See **Section 10 → Clump ID**.
-<br>
-<br>
-* **Automatic Units — no more scale guessing**
-  * GroomFlow now reads the real scale off your character and converts the sliders for you. A length of 0.5 means the same physical size on a normal Blender character and on a centimetre-authored Unreal/MetaHuman rig.
-  * This replaces the old **Target Base Scale** slider, which you had to discover and set by hand. See **Section 1. Units & Scale**.
-<br>
-<br>
-* **Guides Inside Children — one object to export**
-  * The guides can now ride along inside the children object, flagged so Unreal can tell them apart.
-  * A groom used to be two separate objects, so exporting brought two grooms into Unreal with the strands split between them. Now you export the children object alone and the whole groom arrives as one.
-<br>
-<br>
-* **Fixes**
-  * **Children no longer kink at the root.** Every child strand began one point up its guide instead of at the guide's own root, and the surface snap then pulled that point back down — leaving a small hook at the base of every strand. Raising Child Length past 1.0 hid it, which is why it looked like a length problem.
-  * **Child Length above 1.0 really extends past the guide tip now.** It used to stack every point beyond the tip onto the tip itself, folding the end of the strand over.
-  * **Clump Start now means what it says** — the point where clumping *begins*. It previously ramped the clump to full *before* that point, so a small value squeezed the whole change into the first segment or two.
-  * **Texture Mask spreads evenly.** Roots bunched into one region and only filled in as you raised the guide count, because the mask was applied *after* allocating samples rather than before — black areas were handed samples and then threw them away. Coverage no longer depends on the count.
-  * **Texture Mask is much faster on dense meshes** — measured on a 65,000-triangle head, 221 ms down to 87 ms.
-  * **Generating a second groom no longer resets the first one.** Adding a new weight group and pressing Generate used to rebuild the previous layer's curves in place — throwing away everything that had been sculpted or combed into them — and it did so using the *old* weight group, so the newly painted one appeared to do nothing. A Generate aimed at a different mask now creates its own layer and leaves finished grooms alone.
-  * **Spread Along Guide** had no effect at all. It works now.
-  * **Texture Mask → Mask Generate** could fail to complete. Fixed.
-  * Root placement on quad or n-gon meshes was bound to the wrong spot, so hair drifted when the character deformed. Fixed.
-  * Style node sliders (Clump, Frizz, Curl…) did nothing on Blender 5.2. Fixed.
-  * **Add Snap** could not set its target object on Blender 5.2. Fixed.
-  * Weight smoothing on a dense head mesh took tens of seconds — it is now near-instant.
-  * Pressing a style node button no longer causes a multi-second freeze.
-  * Removing a hair layer now asks first, since it deletes the curves object.
-  * Minimum supported Blender is now **4.5 LTS**. Verified on 4.5 LTS, 5.0, 5.2 LTS and 5.3.
+
 ---
 
 ## 🚀 Key Features Guide
@@ -121,12 +207,39 @@ Every length in GroomFlow — strand length, thickness, child radius — is meas
   * GroomFlow reads the true scale off the character itself, so the same slider value gives the same real-world size on any rig.
 <br>
 <br>
-* **Units** *(in the Realtime Simple Children panel)*
-  * **Auto Detect** — the default. Reads the scale from the Target Mesh. Leave it here unless you have a reason not to.
+* **Units** *(at the top of the GroomFlow panel)*
+  * It sits above everything else because it has to be settled **before** the first groom, not found afterwards. Every length in the add-on — guides, children, braid, texture masks — is a world metre multiplied by this one number.
+  * **Auto Detect** — the default. Reads the scale off the mesh the hair is bound to. Leave it here unless you have a reason not to.
   * **Manual** — type the factor yourself. Use this when your mesh has a deliberate non-uniform scale that is part of the look rather than a unit mismatch, and you do not want it corrected.
-  * A line under the setting reports what was detected, for example `1:1 (metres)` or `100x (Unreal / MetaHuman, cm)`.
+  * A line under the setting reports what was detected and which object it read, for example `1:1 (metres)` or `100x (Unreal / MetaHuman, cm)`.
+
+> Blender's hair **solver** is the one thing that a scaled rig still breaks, and that is a limit of the solver rather than of the units — see **Section 9 → The rig's scale**.
+
+> **Changed in v1.8.0:** Units moved from the Children panel to the top of the GroomFlow panel, and it is now one setting for the whole add-on. It used to be read by the children generator alone — the guide generator, the texture mask and the braid each measured their own scale off whichever object they happened to be holding, so **Manual** was ignored outside the children and a guide, its children and the head could each mean a different metre.
 
 > Upgrading from v1.5? The old **Target Base Scale** slider is gone — this replaces it and needs no input. If you had set it to something other than `1.0` to compensate for a scaled character, that compensation is now handled for you.
+
+---
+
+### Make Groom Base
+
+An Unreal-authored character is not a comfortable thing to grow hair on. Its
+rig is scaled by 0.01, and Blender's hair solver reads the object's own units
+as metres - so 5 cm of hair is simulated as a 5 metre strand and blows up
+within a few frames. It is also deformed by an armature, so its shape changes
+under you while you comb.
+
+**Make Groom Base** duplicates it as none of those things: the same surface, in
+the same place in the world, **at scale 1**, with no rig and no shape keys.
+Weights, UVs and materials come across, so masking and weight painting work on
+it. The original is untouched and hidden, and any groom already aimed at it is
+re-pointed at the base.
+
+It also puts the object's origin on the character's own midline, which is what
+Blender's symmetric painting reflects about.
+
+Measured on the same hair over twenty frames: 192x segment stretch on the 0.01
+rig, 1.08x on the base.
 
 ---
 
@@ -149,6 +262,41 @@ Before generating hair, select which masking mode to use. The two modes are comp
   * Best for precise, UV-based control over hair placement — for example, fur patterns or stylized hair zones.
 
 ![TextureMask.png](assets/TextureMask.png)
+---
+
+### Mirroring a Mask
+
+Blender's X Mirror pairs a vertex with whatever sits at exactly `-x`, within a
+tight tolerance. A MetaHuman fails that twice over: it is sculpted, so the two
+halves differ everywhere by a fraction of a millimetre, and its midline is not
+at local `x = 0`. Measured on a mesh with 2 mm of asymmetry sitting 5 cm off
+centre, Blender's mirror paired **0.4%** of the vertices - so it silently did
+nothing. Symmetrize "works" by throwing half the character away.
+
+GroomFlow pairs them on the data instead - it finds the mesh's own midline,
+reflects each vertex about it, and accepts the nearest match within a
+tolerance. Same mesh: **100% paired**. Only weights are written; the geometry is
+never touched.
+
+* **Center Origin on Midline**
+  * Puts local `x = 0` on the character's midline without moving the mesh, and
+    switches X symmetry on. Blender's symmetric painting reflects the brush
+    about the origin, so an origin off the midline is why the mirrored cursor
+    shows but only one side gets painted.
+<br>
+<br>
+* **Auto Mirror While Painting**
+  * Copies each stroke onto the other side a quarter of a second after it
+    lands. Erasing mirrors too. Leave it off on a very heavy head and use the
+    button instead - both use the same pairing, so you can mix them freely.
+<br>
+<br>
+* **Mirror Weights**
+  * Mirrors on demand: **+X to -X**, **-X to +X**, or **Both**, on the active
+    group or all of them.
+  * The **ⓘ** button reports how much of the mesh pairs at four tolerances, so
+    a bad setting is visible rather than silent.
+
 ---
 
 ## 3. Generation & Masking Panel
@@ -234,7 +382,7 @@ These settings control the shape and distribution of generated hair strands. Cha
 * **Strand Resolution**
   * Specifies the number of control points making up a single hair strand.
   * Higher values produce smoother, more flexible curves but increase memory and viewport load.
-<video src="assets/GroomFlow_Pro_08.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_08.gif"></video>
+![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
 
 !!! warning
     * **Never Modify Properties After Manually Sculpting Curves**
@@ -260,7 +408,7 @@ These settings control the shape and distribution of generated hair strands. Cha
 * **Frizz Noise Strength**
   * Adds random directional noise to each strand, creating a naturally messy or frizzy appearance.
   * Higher values produce more chaotic, irregular silhouettes.
-<video src="assets/GroomFlow_Pro_09.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_09.gif"></video>
+![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
 
 ---
 
@@ -286,11 +434,13 @@ Attach Blender geometry node modifiers to the active hair curve to shape the fin
 <br>
 * **Add Braid**
   * Weaves strands into a braided rope pattern for stylized braid or twist effects.
+  * This is one of Blender's own style nodes. For GroomFlow's own braid, which
+    works on the guides and survives simulation, see **Section 10 → Braid**.
 <br>
 <br>
 * **Add Curl**
   * Applies a helical curl deformation along the length of each strand for curly or wavy hairstyles.
-<video src="assets/GroomFlow_Pro_07.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_07.gif"></video>
+![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
 
 ---
 
@@ -310,6 +460,16 @@ Blender 5.2 introduced a new XPBD physics solver for hair. This panel wires it u
 * **Collider**
   * Select any mesh the hair should bump into — the body, a shoulder, a hat — and press this.
   * The scalp itself does not need a collider; that is already handled by **Surface Collision** below.
+<br>
+<br>
+* **Apply Simulation to Guides**
+  * Writes the shape the simulation has reached into the guide curves, as if you
+    had combed it there. Blender's hair solver has no *apply*, so a pose you
+    liked was only ever visible while the frame stood still.
+  * It can switch the solver off and return to the start frame afterwards, so
+    the groom holds that shape instead of falling again.
+  * It refuses when a modifier has resampled the curves, because writing that
+    back would scramble the groom.
 <br>
 <br>
 * **Remove Dynamics**
@@ -349,6 +509,42 @@ These appear once Hair Dynamics has been added, and update the simulation as you
 3. Select the body mesh → **Collider**.
 4. Play the timeline and watch. If hair passes through the body, raise **Substeps**; if it jitters, raise **Linear Damping**.
 5. Leave **Live OFF** while previewing — the children follow the simulated guides on their own (see Passive Follow in the next section).
+
+### The rig's scale, and why the simulation explodes on a MetaHuman
+
+Blender's hair solver runs in the curve object's **own local space**, and treats
+those units as metres. On a character whose rig is scaled — a MetaHuman or any
+Unreal-authored figure is authored in centimetres and scaled by 0.01 — the same
+5 cm of hair is 5 units long in that space, so the solver is trying to simulate
+what it believes is a 5 metre strand. It diverges within a few frames, and the
+guides shoot out of the head in straight spikes.
+
+Measured on identical hair, in the identical place in the world, over twenty
+frames:
+
+| Rig | Worst segment stretch | Result |
+| --- | --- | --- |
+| 1:1, metres | 1.12x | stable |
+| scaled 0.01 (MetaHuman / Unreal) | **192x** | explodes |
+| scaled 0.01, hair object left at scale 1 | 1.00x | stable |
+
+It is **not** gravity, **not** collision and **not** GroomFlow's Units setting —
+with gravity and collision both switched off it still reached 43x, and raising
+Substeps from 10 to 100 did not help either. The only thing that matters is the
+world scale of the object the solver runs on.
+
+**What to do**
+
+* Apply the rig's scale (`Ctrl+A → Scale`) before simulating, or
+* keep the hair curves object at world scale 1, so it follows the head without
+  inheriting its scale.
+
+The panel warns you when the groom's world scale is not 1 and tells you what it
+measured, so you are not left guessing at the spikes.
+
+> This is a property of Blender's solver, not of GroomFlow. Everything else in
+> the add-on — generation, children, braid, export — already works correctly on
+> a scaled rig; see **Section 1. Units & Scale**.
 
 ---
 
@@ -408,9 +604,9 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 
 > **Important:** Build Children and Live Engine are separate actions. You can build children for all curves first, then enable Live once. You do not need to turn the engine on and off between each curve.
 
-<video src="assets/GroomFlow_Pro_04.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_04.gif"></video>
+![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
   <br>
-<video src="assets/GroomFlow_Pro_05.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_05.gif"></video>
+![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
 
 ### Child Strand Settings
 
@@ -421,10 +617,6 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 <br>
 * **Child Point Resolution**
   * Number of control points per child strand. Higher values make smoother curves.
-<br>
-<br>
-* **Units**
-  * How the lengths below are converted to your character's scale. Leave on **Auto Detect** — see **Section 1. Units & Scale**.
 <br>
 <br>
 * **Guides Inside Children**
@@ -444,7 +636,7 @@ This means: if you turn on Blender's native **Hair Dynamics** simulation on the 
 * **Length Max**
   * Maximum length ratio relative to the parent guide. Values above 1.0 allow some children to extend beyond the guide tip.
 
-<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
 
 ### Clump Settings
 
@@ -486,11 +678,158 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * **This does not regenerate your groom.** Combing, sculpting and every strand position are left exactly as they are — only the grouping changes — so you can keep trying arrangements on a finished groom.
 <br>
 <br>
+* **Root Clump**
+  * A second clump profile that grips the hair near the scalp and lets go
+    further down, on top of whatever the main **Clump** is doing. Use it to close
+    the roots of a groom whose lengths are meant to stay loose.
+<br>
+<br>
+* **Root Clump End**
+  * How far down the strand the root grip reaches.
+<br>
+<br>
 * **Preview Clump IDs** *(toggle)*
   * Colours every strand by the clump it belongs to and switches the viewport to Material Preview so you can see it.
   * Press it again to turn it off. The preview colour, its material and your viewport shading are all put back the way they were; the clump data itself is untouched.
 
-<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+
+---
+
+### Hair Cut
+
+Cut the hair the way you would with scissors: put something where it should
+end, and press **Cut**.
+
+1. **Add Cutting Plane** makes a wireframe plane sized to your groom and picks
+   it as the cutter. Any object already in the scene can be used instead.
+2. Move and rotate it to where the hair should stop.
+3. **Cut**.
+
+* **Cut With** — any object. A mesh with faces can cut along its real surface;
+  anything else - an empty, a plane you have not applied - cuts along its own Z
+  plane.
+* **Reads** — *Surface* cuts where the strand actually crosses the cutter, so a
+  plane only cuts the hair it covers. *Plane* extends the cutter's Z plane
+  forever, for a straight cut right across a groom.
+* **Jitter** — breaks the cut line up per strand. A real haircut is not a laser,
+  and a little of this is what stops the ends reading as one flat edge.
+* **Keep At Least** — no strand is cut shorter than this. A root left with no
+  length disappears from the groom and takes its children with it.
+
+The strand keeps its point count and is re-spaced over what is left, so
+children, clump ids, the braid and the export set all keep working. Cutting is
+undoable, and it only touches the strands you have selected in Sculpt mode -
+or all of them, when nothing is selected.
+
+* **Set Guide Resolution**
+  * A cut shortens a strand but leaves it with the same number of points, so
+    the tip end can come out coarse. This re-spaces the guides over a new point
+    count **without regenerating** - shape, combing, cuts, clump ids and the
+    surface binding all survive. Child Point Resolution is raised to match.
+
+---
+
+### Braid
+
+Braids the hair you have already combed, rather than generating three tubes for
+you to place. The braid lives on the **guides**; children follow it through the
+ordinary generation path.
+
+**Making one**
+
+1. Put the 3D cursor where the braid should start — usually the nape, or
+   wherever the hair gathers.
+2. Press **Add Braid**. Every strand that passes within **Gather Radius** of
+   that point is taken into the braid, and the settings are measured off your
+   groom rather than guessed.
+3. **Update Braid** re-solves it. **Clear** puts the hair back and hands it over
+   to you; the **X** removes the braid from the list.
+
+> Brushing and combing a braided groom is fine. The braid records what it wrote,
+> so your strokes survive and the weave re-forms around them.
+
+**Gather**
+
+* **Gather Radius** — how much hair the braid takes. The panel says how many
+  guides that is, and how far the nearest one is when it reaches none.
+* **Gather Falloff** — softens the edge of the gather, so the slider moves
+  continuously instead of taking whole guides at a step, and so braided hair
+  does not sit hard against untouched hair.
+* **Center** — where the braid starts. It snaps onto the nearest strand when the
+  braid is created.
+
+**Shape**
+
+* **Weave** — *Braid* is the three-strand plait. *Rope* is three helices twisted
+  together. *Flat* keeps the three on one line that turns as it goes down.
+* **Braid Diameter** — how far the bundles swing apart.
+* **Inner / Outer Diameter** — how thick a bundle is at its narrowest and at its
+  widest point. The difference between the two is the scallop along the braid's
+  outline.
+* **Bulge Bias** — how sharply the thickness changes between those two. At 0 the
+  bundle keeps its Outer Diameter the whole way and there is no scallop.
+* **Clump Hold** — how tightly hair clings to its own lock. 0 fills the bundle
+  evenly; 1 collapses each lock onto its guide.
+* **Guide Attract** — pulls the children onto the guides, for a clean, tidy
+  braid.
+* **Knot Tightness** — squeezes the braid where the strands cross. The weave
+  already narrows there; this deepens it until each crossing reads as a knot.
+* **Weave Depth** — adds to or takes from how far the bundles pass in front of
+  and behind each other. 0 is the depth a plait has on its own; the bottom of
+  the range flattens it into one plane.
+* **Roundness** — lifts the bundles off the braid's centre line. At 0 the middle
+  bundle passes straight through the centre, where it has no distance from the
+  axis at all and Inner, Outer and Bulge cannot reach it — so only the outer two
+  get shaped.
+* **Twist** — turns of the braid's own plane over its length. A plait is flat, so
+  without this it is wide from the front and thin from the side. Twisting makes
+  every viewpoint the same.
+* **Lock Flatness** — cross-section squash of each lock. This is the shape of the
+  hair itself; use Weave Depth for how deep the braid is.
+* **Roll** — rotates the braid's face around its own length. 0 faces away from
+  the head.
+
+**Along the braid**
+
+* **Pitch** — the length of one full weave cycle. Smaller is a finer braid.
+* **Braid Start** — where along the strands the weave begins.
+* **Ease In** — how gradually it takes hold at that point.
+* **Tip Scale** — how much of the braid's width is left at the tip. 0 closes it
+  to a point.
+
+**The tail**
+
+* **Tail Length** — how much of the braid, measured back from the tip, is left
+  loose below the tie. 0 braids all the way down.
+* **Tail Cinch** — how hard the tie squeezes the hair where the braid ends.
+* **Tail Relax** — how loosely the tail hangs. 0 keeps it gripped as a tight
+  tassel, 1 opens it back to the braid's own width. Tied hair stays tied either
+  way.
+
+**Loose hair**
+
+* **Flyaways** — the share of strands held back from the weave.
+* **Flyaway Length** — how far those strands stand out.
+* **Seed** — reshuffles which strands those are.
+
+**Simulation**
+
+* **Hold Under Simulation** *(on by default)* — keeps the braid woven while Hair
+  Dynamics runs. The simulation still swings the braid; it just cannot pull the
+  plait apart.
+
+**Clump IDs and resolution**
+
+* **Set 3 Clump IDs** — gives the braided hair Clump IDs 1, 2 and 3, one per
+  strand of the plait. Hair outside the braid that already used those IDs is
+  moved off them as a whole group. Changing **Clump Size**, or regenerating the
+  guides, overwrites this — press it again afterwards.
+* **Add Points for This Pitch** — appears when the guides are too coarse for the
+  Pitch you asked for. A weave finer than the guides can carry does not come out
+  coarse, it comes out wrong: narrow, flat and closer to a screw than a braid.
+  This resamples the guides to the resolution the weave needs and raises Child
+  Resolution to match.
 
 ---
 
@@ -500,17 +839,52 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * When enabled, generating hair overwrites the curves in the currently active layer.
   * When disabled, each generation creates an entirely new layer on top of existing ones.
   * Leave this enabled during normal grooming to avoid accumulating redundant objects.
-<video src="assets/GroomFlow_Pro_03.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_03.gif"></video>
+![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
 <br>
 <br>
 * **Generate on Vertices**
   * Snaps and generates hair guide curve roots precisely onto mesh vertices instead of face surfaces.
   * Useful for low-poly assets or grooms that require roots to align exactly with the mesh topology.
-<video src="assets/GroomFlow_Pro_02.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_02.gif"></video>
+![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
 
 ---
 
 ## 12. Process Control Buttons
+
+### Keeping Your Work When Settings Change
+
+Changing a generation setting rebuilds the groom. It always has - and a rebuild
+used to throw away every comb stroke, every cut and every braid.
+
+* **Keep My Edits** *(on)*
+  * Your offsets are lifted off before the rebuild and put back on after it, so
+    the groom is regenerated with the new settings and still combed the way you
+    left it.
+  * When the guide count is unchanged, they go back exactly - measured over
+    twenty rebuilds with a braid on, the groom did not drift at all.
+  * When the guide count changes, each **new** guide takes the offsets of the
+    **nearest old guide**, sampled along its own length, so the new hair comes
+    out combed rather than straight.
+<br>
+<br>
+
+> **Worth knowing:** because a new guide copies its nearest old one, taking
+> **Guide Density down to 1 and back up again fills the whole groom with that
+> one guide's shape.** There is only one guide left to copy from. It is not a
+> fault - it is what "take the nearest one" means when there is only one. If
+> you want the groom back as generated, turn **Keep My Edits** off for that one
+> rebuild, or press Generate with it off and on again afterwards.
+
+* **Auto Regenerate** *(on)*
+  * Rebuilds as soon as a setting changes, the way it always has.
+  * Turn it **off** on a heavy groom: the setting is remembered, the panel says
+    the groom is behind, and **Generate** is what rebuilds. Nothing is lost
+    either way - this is about when the work happens, not whether it survives.
+<br>
+<br>
+* **Thickness never rebuilds at all.** Vertex Min/Max and Tip Thickness only
+  write the strand radius, so they are applied in place - not a single point
+  moves, whatever the two switches above are set to.
 
 ### Vertex Weight Mode
 
@@ -529,8 +903,8 @@ GroomFlow knows exactly which guide each child grew from, so its clump grouping 
   * Softens sharp transitions in the active weight map into a smooth gradient.
   * Prevents abrupt length changes at the boundary between painted and unpainted areas.
 
-<video src="assets/GroomFlow_Pro_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01.gif"></video>
-<video src="assets/GroomFlow_Pro_01_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01_01.gif"></video>
+![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
+![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
 
 ### Texture Mask Mode
 

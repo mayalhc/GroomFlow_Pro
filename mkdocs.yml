@@ -26,8 +26,7 @@ markdown_extensions:
 # 네비게이션
 nav:
   - GroomFlow PRO Guide: index.md
-  - "Go to GroomForge Wiki": integration.md
-
+  - "All add-ons & guides": https://mayalhc.github.io/GroomForge-Wiki/
 # 플러그인 설정
 hooks:
   - hooks/media.py
