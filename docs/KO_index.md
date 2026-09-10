@@ -12,7 +12,7 @@
   * GroomFlow Pro의 공식 문서 및 사용자 가이드에 오신 것을 환영합니다.
   * 이 고급 가이드 기반 헤어 시스템을 활용하여 그루밍 워크플로우를 최대화하는 방법을 알아보세요.
 
-![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
+<video src="assets/GroomFlow_Pro_10.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_10.gif"></video>
 
 ---
 
@@ -375,7 +375,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
   * 단일 헤어 스트랜드를 구성하는 컨트롤 포인트의 수를 지정합니다.
   * 값이 높을수록 더 부드럽고 유연한 커브가 생성되지만 메모리와 뷰포트 부하가 증가합니다.
 
-![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
+<video src="assets/GroomFlow_Pro_08.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_08.gif"></video>
 
 !!! warning
     * **수동으로 스컬핑한 커브의 프로퍼티를 절대 수정하지 마세요**
@@ -402,7 +402,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
   * 각 스트랜드에 무작위 방향 노이즈를 추가하여 자연스럽게 헝클어지거나 곱슬거리는 외형을 만듭니다.
   * 값이 높을수록 더 혼란스럽고 불규칙한 실루엣이 생성됩니다.
 
-![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
+<video src="assets/GroomFlow_Pro_09.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_09.gif"></video>
 
 ---
 
@@ -434,7 +434,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
 * **Add Curl (컬 추가)**
   * 곱슬거리거나 웨이브 헤어스타일을 위해 각 스트랜드의 길이를 따라 나선형 컬 변형을 적용합니다.
 
-![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
+<video src="assets/GroomFlow_Pro_07.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_07.gif"></video>
 
 ---
 
@@ -585,9 +585,9 @@ v1.6.0부터 실시간 재계산이 그래픽 카드에서 실행되어 이전�
 
 > **중요:** Build Children과 Live 엔진은 별개의 작업입니다. 먼저 모든 커브에 대해 Children을 빌드한 다음 Live를 한 번 활성화할 수 있습니다. 커브마다 엔진을 켜고 끌 필요가 없습니다.
 
-![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
+<video src="assets/GroomFlow_Pro_04.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_04.gif"></video>
   <br>
-![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
+<video src="assets/GroomFlow_Pro_05.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_05.gif"></video>
 
 ### 차일드 스트랜드 설정
 
@@ -617,7 +617,7 @@ v1.6.0부터 실시간 재계산이 그래픽 카드에서 실행되어 이전�
 * **Length Max (최대 길이)**
   * 부모 가이드에 대한 최대 길이 비율입니다. 1.0 이상의 값은 일부 Children이 가이드 팁을 넘어 늘어날 수 있게 합니다.
 
-![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
 
 ### 클럼프 설정
 
@@ -673,7 +673,7 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 클럼프별로 스트랜드에 색을 입히고 뷰포트를 Material Preview로 전환해 눈으로 확인시켜 줍니다.
   * 다시 누르면 꺼집니다. 미리보기 색상, 머티리얼, 뷰포트 셰이딩이 모두 원래대로 복구되며 클럼프 데이터 자체는 그대로 남습니다.
 
-![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
+<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
 
 ---
 
@@ -816,14 +816,14 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 비활성화하면 각 생성 시 기존 레이어 위에 완전히 새로운 레이어가 생성됩니다.
   * 중복 오브젝트가 쌓이지 않도록 일반적인 그루밍 중에는 이 옵션을 활성화된 상태로 두세요.
 
-![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
+<video src="assets/GroomFlow_Pro_03.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_03.gif"></video>
 <br>
 <br>
 * **Generate on Vertices (버텍스에 생성)**
   * 면 표면 대신 메쉬 버텍스에 정확하게 헤어 가이드 커브 루트를 스냅하고 생성합니다.
   * 로우폴리 에셋이나 루트가 메쉬 토폴로지와 정확히 일치해야 하는 그루밍에 유용합니다.
 
-![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
+<video src="assets/GroomFlow_Pro_02.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_02.gif"></video>
 
 ---
 
@@ -879,8 +879,8 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 활성 웨이트 맵의 날카로운 전환을 부드러운 그라디언트로 완화합니다.
   * 페인팅된 영역과 페인팅되지 않은 영역의 경계에서 갑작스러운 길이 변화를 방지합니다.
 
-![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
-![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
+<video src="assets/GroomFlow_Pro_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01.gif"></video>
+<video src="assets/GroomFlow_Pro_01_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01_01.gif"></video>
 
 ### Texture Mask 모드
 
