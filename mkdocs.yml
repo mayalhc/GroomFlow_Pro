@@ -14,7 +14,11 @@ theme:
   sticky_navigation: true
   navigation_depth: 4
   titles_only: false 
-
+  
+extra:
+  analytics:
+      provider: google
+      property: G-SNSJS19D0M
 # 마크다운 확장 기능 (기본 제공 모듈만 사용)
 markdown_extensions:
   - admonition
