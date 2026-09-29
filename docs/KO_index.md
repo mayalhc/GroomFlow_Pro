@@ -12,136 +12,42 @@
   * GroomFlow Pro의 공식 문서 및 사용자 가이드에 오신 것을 환영합니다.
   * 이 고급 가이드 기반 헤어 시스템을 활용하여 그루밍 워크플로우를 최대화하는 방법을 알아보세요.
 
-<video src="assets/GroomFlow_Pro_10.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_10.gif"></video>
+![GroomFlow_Pro_10.gif](assets/GroomFlow_Pro_10.gif)
 
 ---
 
-## 🆕 v1.8.1의 새로운 기능 (성능 개선)
+## 🆕 v1.8.2의 새로운 기능 (핫픽스)
 
-* **신기능: 헤어 다이나믹스 중 타이로 묶인 부분 핀 고정 (블렌더 5.2+)**
-  * GroomFlow 타이가 쥔 부분만 더 이상 시뮬레이션되지 않습니다. 타이 그립
-    지점에서 완전 고정(1.0), 루트와 촉 방향으로 부드럽게 감쇠하는 밴드 형태로,
-    밴드 밖의 머리카락은 그대로 시뮬레이션됩니다.
-  * 타이를 선택하면 타이 패널의 **Pin Width** 슬라이더로 고정 밴드 폭을
-    조절합니다 (0.25 = 스트랜드 중간 절반 고정, 0.5 = 끝부분만 제외하고 전부
-    고정).
-  * 솔버 내부 상태는 전혀 건드리지 않습니다. 핀은 Hair Dynamics 노드 래퍼
-    안에서 타이로부터 기록된 포인트별 마스크(`gf_pin`)로 동작하므로 리셋할
-    것도, 프레임마다 도는 Python도 없습니다.
-  * Hair Dynamics 설정의 **Pin Tied Strands** 체크박스로 켜고 끕니다. 타이를
-    풀면 그 부분은 자동으로 다시 시뮬레이션됩니다.
-  * 업데이트 전에 다이나믹스를 붙였거나 노드가 꼬였다면 다이나믹스 설정의
-    **Rebuild Dynamics** 버튼으로 래퍼 노드와 핀 체인을 처음부터 다시 만들 수
-    있습니다 (솔버 설정은 유지되고 Children 쪽도 함께 재구성).
-* **수정: Live Engine이 꺼져 있을 때 "Build Children"이 아무 작업도 하지 않는 문제**
-  * 빌드 경로가 라이브 엔진 가드 뒤에서 조기 종료되어, Live가 꺼져 있으면
-    Children 오브젝트만 만들고 계산은 하지 않았습니다. 이제 빌드는 항상
-    계산을 수행합니다.
-* **생성 속도 대폭 향상**
-  * 스트랜드 전체를 채우던 포인트별 Python 루프(가이드 5,000개 기준 10만 회
-    이상 반복)가 몇 개의 numpy 연산으로 대체되었고, 평가된 포즈도 버텍스별
-    루프 두 개 대신 `foreach_set` 한 번으로 빌드 메시에 적용됩니다.
-* **라이브 엔진 틱 경량화**
-  * GPU 입력 텍스처는 데이터가 실제로 바뀔 때만 다시 업로드됩니다(재생 중에는
-    RNG 테이블과 표면 노멀이 사실상 업로드되지 않음), 가이드 루트가 움직였을
-    때만 가이드 팔로우 속성을 다시 쓰고, 슬라이더 드래그는 이벤트마다가 아닌
-    하나의 지연 리빌드로 병합되며, 의존성 그래프 업데이트 목록을 가이드마다가
-    아닌 패스당 한 번만 훑습니다.
-* **씬 전체 스캔 제거**
-  * 타이 고아 정리가 모든 depsgraph 업데이트마다가 아니라 무언가가 삭제되었을
-    때(그리고 파일 로드/실행 취소 시)만 실행됩니다. 브레이드 패널은 다시 그릴
-    때마다 세 번이 아니라 한 번만 가이드 거리를 계산하고, 텍스처 마스크 생성은
-    업데이트를 강제한다는 이유로 이미지 픽셀 버퍼 전체를 복사하지 않으며, 퍼
-    스트랜드 길이는 스트랜드마다 난수 생성기를 만드는 대신 값싼 결정론적 해시를
-    사용합니다.
-
----
-
-## 🆕 v1.8.0의 새로운 기능
-
-* **생성 컨트롤을 수정해도 그룸이 초기화되지 않습니다**
-  * 이번 업데이트의 핵심입니다. Guide Density, Length, Resolution — 생성 설정을
-    바꾸면 그룸이 다시 만들어지는데, 지금까지는 그때마다 빗질도 컷도 브레이드도
-    전부 사라졌습니다. 작업을 시작한 뒤로는 사실상 그 컨트롤들을 다시 만질 수
-    없었다는 뜻입니다.
-  * **Keep My Edits**가 작업물을 재생성 너머로 옮겨 줍니다. 재생성 전에
-    오프셋을 떼어냈다가 후에 다시 얹으므로, 새 설정으로 다시 만들어지면서도
-    빗질한 그대로 남습니다.
-  * 가이드 수가 그대로면 **정확히** 복원됩니다 — 브레이드를 건 채로 20회
-    재생성했을 때 변화량이 전혀 없었습니다. 밀도를 올리면 새 가이드가 가장
-    가까운 이웃의 모양을 받아, 곧게 서지 않고 빗질된 상태로 나옵니다.
-  * **Thickness는 이제 아예 재생성하지 않습니다.** Vertex Min/Max와 Tip
-    Thickness는 스트랜드 반경만 쓰기 때문에 제자리에서 적용됩니다 — 포인트가
-    하나도 움직이지 않습니다.
-  * **섹션 12 → 설정을 바꿔도 작업이 남습니다**를 참조하세요.
-<br>
-<br>
-* **Braid (땋은 머리)**
-  * 이미 빗어놓은 머리를 그대로 땋습니다. 땋기 시작할 자리에 3D 커서를 놓고
-    **Add Braid**를 누르면, 그 지점을 지나는 스트랜드가 세 다발로 묶여 서로
-    엮입니다.
-  * 가이드에 적용되므로 Children은 빗질을 따라오는 것과 똑같은 방식으로
-    따라옵니다. 그룸을 만드는 방식은 하나도 바뀌지 않습니다.
-  * **Knot Tightness**는 가닥이 교차하는 자리를 조입니다. 머리가 밧줄이 아니라
-    땋은 머리로 보이게 만드는 요소의 대부분이 이것입니다.
-  * **Tail Length / Tail Cinch / Tail Relax**로 땋임을 묶어 마무리하고, 매듭
-    아래에 남은 머리를 늘어뜨립니다.
-  * **Twist**와 **Roundness**가 얼마나 둥글게 보일지를 정합니다. 땋은 머리는
-    원래 납작해서 정면에선 넓고 옆에선 얇은데, 이 둘이 어느 각도에서 봐도 같은
-    실루엣을 만들어 줍니다.
-  * **Hold Under Simulation**은 Hair Dynamics가 도는 동안에도 땋임을 유지합니다.
-    Blender는 가이드를 각각 독립된 가닥으로 시뮬레이션하고 세 다발이 서로 얽혀
-    있다는 것을 솔버가 알지 못하기 때문에, 이것이 없으면 땋은 머리는 몇 프레임
-    만에 풀립니다.
-  * **Set 3 Clump IDs**는 땋인 머리에 Clump ID 1, 2, 3을 부여합니다 — 땋임의 세
-    가닥에 하나씩입니다.
-  * **섹션 10 → Braid**를 참조하세요.
-<br>
-<br>
-* **Hair Cut (헤어 컷)**
-  * 머리가 끝날 자리에 플렌 — 또는 아무 오브젝트나 — 을 놓고 **Cut**을 누르면,
-    그것을 지나는 모든 가닥이 거기서 잘립니다.
-  * 메쉬는 **실제 표면**을 따라 자르므로, 플렌은 자기가 덮은 부분만 자릅니다 —
-    진짜 가위질과 같습니다. 그 외의 오브젝트는 자기 Z 평면으로 자릅니다.
-  * **Jitter**가 절단선을 흩뜨립니다. 진짜 커트는 레이저가 아니니까요.
-  * **섹션 10 → Hair Cut**을 참조하세요.
-<br>
-<br>
-* **Make Groom Base (그룸 베이스 만들기)** *(메타휴먼 / Unreal 캐릭터용)*
-  * 버튼 하나로 캐릭터 메쉬를 그룸 작업용 복제본으로 만듭니다. 같은 표면, 같은
-    자리, **스케일 1**, 리그와 셰이프키 없음. 웨이트·UV·머티리얼은 그대로
-    넘어오고 원본은 손대지 않습니다.
-  * 0.01로 축소된 리그에서는 블렌더 헤어 솔버가 발산합니다 — 같은 머리카락이
-    20프레임에 192배 늘어났고, 베이스 위에서는 1.00배였습니다.
-  * **섹션 1 → Make Groom Base**를 참조하세요.
-<br>
-<br>
-* **Mirror Weights, 그리고 양쪽 동시에 칠하기**
-  * 블렌더 자체 대칭은 조각된 헤드의 정점 짝을 못 찾아서 조용히 아무 일도 하지
-    않습니다. GroomFlow는 허용치를 두고 직접 짝을 찾습니다.
-  * **Auto Mirror While Painting**은 붓질이 끝나는 즉시 반대쪽에 반영합니다.
-  * **섹션 2 → 마스크 미러**를 참조하세요.
-<br>
-<br>
-* **Units (단위) — 패널 최상단으로**
-  * 첫 그룸을 만들기 전에 정해야 하는 값인데, 예전에는 Children을 설정한 뒤에야 손댈 수 있었습니다. 이제 GroomFlow 패널 맨 위에 있습니다.
-  * 그리고 이제 **가이드, Children, 브레이드, 텍스처 마스크가 모두 같은 단위를 씁니다.** 예전에는 Children만 이 설정을 읽었습니다.
-  * **섹션 1. 단위 & 스케일**을 참조하세요.
-<br>
-<br>
-* **Root Clump (뿌리 클럼프)**
-  * 두피 근처에서 머리를 모으고 아래로 갈수록 놓아주는 두 번째 클럼프
-    프로파일입니다. 기존 **Clump**와 별개로 함께 적용됩니다.
-  * 길이는 느슨하게 두면서 뿌리만 정리하고 싶을 때 사용합니다.
-  * **Root Clump End**로 그 힘이 어디까지 미칠지 정합니다.
-<br>
-<br>
-* **Apply Simulation to Guides (시뮬레이션을 가이드에 적용)**
-  * Blender의 헤어 솔버에는 *적용*이 없어서, 마음에 드는 모양이 나와도 프레임이
-    멈춰 있는 동안에만 볼 수 있었습니다. 이 버튼이 시뮬레이션된 모양을 가이드에
-    그대로 써넣습니다.
-  * 그 다음부터는 평범한 그룸입니다 — 빗질하고, 땋고, 익스포트하면 됩니다.
-  * **섹션 9. 헤어 다이나믹스 & 충돌**을 참조하세요.
+* **신기능: Trim by Mask - 마스크 밖 Children 삭제**
+  * 가이드는 마스크가 허용하는 곳에만 생기지만 Children은 그 주변으로
+    흩뿌려집니다. Radius가 커지면 그 흩뿌림이 칠한 영역을 넘어가 맨살에
+    머리카락이 자랍니다.
+  * **Trim by Mask** (Children > Root Distribution)는 각 Children 루트를
+    가이드를 생성한 바로 그 마스크(버텍스 그룹 또는 텍스처 마스크)에 다시
+    대조해서, 마스크 밖으로 나간 Children을 삭제합니다.
+  * **Mask Threshold**는 가이드 생성기의 Weight Threshold와 별개의 값이라
+    Children을 가이드보다 더 타이트하게, 또는 더 느슨하게 자를 수 있습니다.
+    이 값은 마스크가 실제로 가진 최대값을 기준으로 읽히므로, 정확히 1.0에
+    도달하지 않는 마스크에서도 1.0은 "마스크가 가장 진한 곳만"을 뜻합니다.
+  * 비용은 없습니다. 마스크는 각 루트가 표면 스냅에 이미 보고한 폴리곤에서
+    읽으므로 추가 조회가 단 한 번도 없습니다. 기록할 스트랜드가 줄어드니
+    잘라낸 그룸은 오히려 *더 빠릅니다* - 가이드 300 × Children 200 기준
+    181ms에서 94ms로 측정되었습니다.
+* **수정: Radius를 올리면 Children이 가이드보다 길게 늘어나는 문제**
+  * Children을 피부에 앉히는 루트 보정이 끝으로 갈수록 감쇠하도록 적용되어,
+    루트는 표면으로 당겨지는데 끝은 제자리에 남았습니다. 그래서 루트가 이동한
+    거리만큼 스트랜드가 늘어났습니다. 곡면에서는 이 거리가 Radius와 함께
+    커집니다 - 구에서 측정한 결과 Radius 0.2에서 가이드 길이의 1.40배,
+    0.8에서 2.74배까지 늘어나 길쭉한 스트랜드가 뻗어 나왔습니다.
+  * 이제 보정이 스트랜드 전체를 한 번에 이동시켜 모양과 길이가 정확히
+    유지됩니다 - 모든 Radius에서 1.00배입니다.
+* **수정: Radius가 작을 때 Children이 메쉬에서 떨어지는 문제**
+  * Children Radius를 약 0.015 이하로 두면 일부 Children의 루트가 피부에
+    붙지 않고 떠 있었습니다.
+  * 이제 Children 루트 오프셋을 표면을 따라 평평하게 맞춰 루트가 피부 위에서
+    시작합니다. 루트 위쪽으로는 이 보정이 끝으로 갈수록 서서히 사라져
+    밑동이 꺾이지 않습니다.
+  * GPU와 CPU Children 경로 모두 수정되었습니다.
 
 ---
 
@@ -375,7 +281,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
   * 단일 헤어 스트랜드를 구성하는 컨트롤 포인트의 수를 지정합니다.
   * 값이 높을수록 더 부드럽고 유연한 커브가 생성되지만 메모리와 뷰포트 부하가 증가합니다.
 
-<video src="assets/GroomFlow_Pro_08.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_08.gif"></video>
+![GroomFlow_Pro_08.gif](assets/GroomFlow_Pro_08.gif)
 
 !!! warning
     * **수동으로 스컬핑한 커브의 프로퍼티를 절대 수정하지 마세요**
@@ -402,7 +308,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
   * 각 스트랜드에 무작위 방향 노이즈를 추가하여 자연스럽게 헝클어지거나 곱슬거리는 외형을 만듭니다.
   * 값이 높을수록 더 혼란스럽고 불규칙한 실루엣이 생성됩니다.
 
-<video src="assets/GroomFlow_Pro_09.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_09.gif"></video>
+![GroomFlow_Pro_09.gif](assets/GroomFlow_Pro_09.gif)
 
 ---
 
@@ -434,7 +340,7 @@ Hair Curve Layers 패널은 **Vertex Weight** 모드에서 생성된 헤어 오�
 * **Add Curl (컬 추가)**
   * 곱슬거리거나 웨이브 헤어스타일을 위해 각 스트랜드의 길이를 따라 나선형 컬 변형을 적용합니다.
 
-<video src="assets/GroomFlow_Pro_07.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_07.gif"></video>
+![GroomFlow_Pro_07.gif](assets/GroomFlow_Pro_07.gif)
 
 ---
 
@@ -585,9 +491,9 @@ v1.6.0부터 실시간 재계산이 그래픽 카드에서 실행되어 이전�
 
 > **중요:** Build Children과 Live 엔진은 별개의 작업입니다. 먼저 모든 커브에 대해 Children을 빌드한 다음 Live를 한 번 활성화할 수 있습니다. 커브마다 엔진을 켜고 끌 필요가 없습니다.
 
-<video src="assets/GroomFlow_Pro_04.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_04.gif"></video>
+![GroomFlow_Pro_04.gif](assets/GroomFlow_Pro_04.gif)
   <br>
-<video src="assets/GroomFlow_Pro_05.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_05.gif"></video>
+![GroomFlow_Pro_05.gif](assets/GroomFlow_Pro_05.gif)
 
 ### 차일드 스트랜드 설정
 
@@ -617,7 +523,7 @@ v1.6.0부터 실시간 재계산이 그래픽 카드에서 실행되어 이전�
 * **Length Max (최대 길이)**
   * 부모 가이드에 대한 최대 길이 비율입니다. 1.0 이상의 값은 일부 Children이 가이드 팁을 넘어 늘어날 수 있게 합니다.
 
-<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
 
 ### 클럼프 설정
 
@@ -639,6 +545,8 @@ v1.6.0부터 실시간 재계산이 그래픽 카드에서 실행되어 이전�
 * **Root Spread** — 가이드 루트 주변에서 Children이 흩뿌려지는 디스크 영역의 반경입니다. 0.0에서는 모든 Children이 정확히 가이드 루트에서 시작합니다.
 * **Spread Along Guide** — Root Spread가 0보다 클 때, 흩뿌림을 균일한 원이 아니라 가이드가 누운 방향으로 늘립니다. 두피에 눕혀 빗은 머리에 사용하세요.
 * **Root Seed** — 차일드 루트 배치 패턴의 랜덤 시드입니다. 다른 설정을 변경하지 않고 다른 배열을 얻으려면 이 값을 변경하세요.
+* **Trim by Mask** — 루트가 가이드를 생성한 마스크 밖으로 나간 Children을 삭제합니다. 기본값은 꺼짐입니다. Radius를 크게 줘서 Children 루트가 칠한 영역을 넘어 맨살로 나갔을 때 켜세요. 웨이트 마스크로 만든 그룸은 버텍스 그룹을, 텍스처 마스크로 만든 그룸은 마스크 이미지를 — 이 가이드를 만든 쪽을 — 자동으로 읽으므로 따로 지정하거나 다시 연결할 것이 없습니다.
+* **Mask Threshold** — Trim by Mask가 켜져 있을 때, Children 루트가 살아남기 위해 필요한 마스크 값입니다. 가이드 생성기의 *Weight Threshold*와는 별개의 값이라, Children을 가이드가 놓인 기준보다 더 타이트하게 또는 더 느슨하게 자를 수 있습니다. 이 값은 절대값 1.0이 아니라 마스크가 실제로 가진 최대값을 기준으로 읽힙니다. 그래서 1.0에 정확히 도달하지 않는 칠한 마스크에서도 1.0은 "마스크가 가장 진한 곳만"을 뜻합니다. 0.0에서는 아무것도 잘리지 않습니다.
 
 > **v1.6.0에서 수정:** *Spread Along Guide*는 이전까지 어떤 값을 넣어도 전혀 동작하지 않았습니다. 이제 설명대로 작동합니다.
 
@@ -673,7 +581,7 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 클럼프별로 스트랜드에 색을 입히고 뷰포트를 Material Preview로 전환해 눈으로 확인시켜 줍니다.
   * 다시 누르면 꺼집니다. 미리보기 색상, 머티리얼, 뷰포트 셰이딩이 모두 원래대로 복구되며 클럼프 데이터 자체는 그대로 남습니다.
 
-<video src="assets/GroomFlow_Pro_06.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_06.gif"></video>
+![GroomFlow_Pro_06.gif](assets/GroomFlow_Pro_06.gif)
 
 ---
 
@@ -816,14 +724,14 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 비활성화하면 각 생성 시 기존 레이어 위에 완전히 새로운 레이어가 생성됩니다.
   * 중복 오브젝트가 쌓이지 않도록 일반적인 그루밍 중에는 이 옵션을 활성화된 상태로 두세요.
 
-<video src="assets/GroomFlow_Pro_03.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_03.gif"></video>
+![GroomFlow_Pro_03.gif](assets/GroomFlow_Pro_03.gif)
 <br>
 <br>
 * **Generate on Vertices (버텍스에 생성)**
   * 면 표면 대신 메쉬 버텍스에 정확하게 헤어 가이드 커브 루트를 스냅하고 생성합니다.
   * 로우폴리 에셋이나 루트가 메쉬 토폴로지와 정확히 일치해야 하는 그루밍에 유용합니다.
 
-<video src="assets/GroomFlow_Pro_02.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_02.gif"></video>
+![GroomFlow_Pro_02.gif](assets/GroomFlow_Pro_02.gif)
 
 ---
 
@@ -879,8 +787,8 @@ GroomFlow는 각 차일드가 어느 가이드에서 나왔는지 정확히 알�
   * 활성 웨이트 맵의 날카로운 전환을 부드러운 그라디언트로 완화합니다.
   * 페인팅된 영역과 페인팅되지 않은 영역의 경계에서 갑작스러운 길이 변화를 방지합니다.
 
-<video src="assets/GroomFlow_Pro_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01.gif"></video>
-<video src="assets/GroomFlow_Pro_01_01.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_01_01.gif"></video>
+![GroomFlow_Pro_01.gif](assets/GroomFlow_Pro_01.gif)
+![GroomFlow_Pro_01_01.gif](assets/GroomFlow_Pro_01_01.gif)
 
 ### Texture Mask 모드
 
