@@ -15,40 +15,36 @@
 <video src="assets/GroomFlow_Pro_10.mp4" autoplay loop muted playsinline style="width:100%;border-radius:6px" title="GroomFlow_Pro_10.gif"></video>
 ---
 
-## 🆕 What's New in v1.8.2 (Hotfix)
+## 🆕 What's New in v1.8.3
 
-* **NEW: Trim by Mask - children outside the mask are deleted**
-  * Guides are only born where the mask allows, but their children scatter
-    around them, and at a wide Radius that scatter reaches past the painted
-    area and grows hair on bare skin.
-  * **Trim by Mask** (Children > Root Distribution) reads each child root back
-    against the very mask the guides were generated from - the vertex group or
-    the texture mask - and deletes the children that fall outside it.
-  * **Mask Threshold** is its own value, separate from the guide generator's
-    Weight Threshold, so the children can be trimmed tighter or looser than
-    the guides. It is read against the strongest value the mask actually
-    holds, so 1.0 means "only where the mask is at its strongest" even on a
-    mask that never reaches a clean 1.0.
-  * It costs nothing: the mask is sampled from the polygon each root already
-    reported to the surface snap, so there is not one extra query. With fewer
-    strands left to write, a trimmed groom builds *faster* - measured at 300
-    guides x 200 children, 181 ms down to 94 ms.
-* **Fix: Children stretched longer than their guide as Radius went up**
-  * The root correction that puts a child on the skin was faded out toward the
-    tip, so the root was pulled onto the surface while the tip stayed where it
-    was - the strand was stretched by however far its root had to travel. That
-    distance grows with Radius on anything curved: measured on a sphere,
-    children reached 1.40x the guide's length at Radius 0.2 and 2.74x at 0.8,
-    a spray of over-long strands.
-  * The correction now moves the whole strand at once, so shape and length are
-    kept exactly - 1.00x at every Radius.
-* **Fix: Children floating off the mesh at a small Radius**
-  * With the children Radius at about 0.015 or below, some children's roots
-    sat above the skin instead of on it.
-  * Each child's root offset is now kept flat along the surface, so the root
-    starts on the skin. Above the root, that correction fades out toward the
-    tip, so there is no kink at the base.
-  * Fixed in both the GPU and CPU children paths.
+* **Fix: Clump Noise changed the groom when Child Resolution changed**
+  * The break-up was drawn per POINT rather than along the strand, so adding
+    points packed in more and more zig-zag. Going from 6 points to 64 made the
+    strands about ten times longer and moved them 12.9 mm on average on a
+    17.5 cm head - and raising the resolution never settled on an answer.
+  * The noise is now a function of where you are along the hair, so the shape
+    holds still: at Child Resolution 32 the groom is within 0.11 mm and 0.6%
+    of length of the same groom at 64, and it converges from there.
+  * Grooms that use Clump Noise will look slightly different from before. The
+    strength of the effect is unchanged.
+* **Fix: the GPU and CPU paths built different grooms with Clump Noise on**
+  * The noise phase came from `fract(sin(...))`, which keeps none of its low
+    bits across float precisions - the two paths disagreed by more than the
+    noise itself was worth (0.126 against an effect of 0.065). An integer hash
+    replaces it and the paths now agree to 4e-5, which is rounding.
+  * This showed up on machines without GPU compute, and on grooms large enough
+    to fall back to the CPU path.
+* **Faster builds and lighter live ticks**
+  * The children and the guides were stacked into one new array and then
+    transformed into another - two full copies of every point in the groom.
+    They are now written straight into a buffer that is allocated once and
+    reused.
+  * The root snap's correction was added to a strided slice numpy cannot
+    vectorise. It now rides along with the transform that was already being
+    done, on a contiguous buffer: the snap stage went from 112 ms to 46 ms at
+    a million strands.
+  * At a million strands a build is 321 ms down to 290 ms and a live tick
+    334 ms down to 277 ms. Not a single point of the groom changed value.
 
 ---
 
